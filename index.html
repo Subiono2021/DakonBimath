@@ -249,12 +249,179 @@
                     <li><strong>Simbolisme Astronomi:</strong> Jumlah lubang (7 di setiap sisi) sering dikaitkan dengan jumlah hari dalam seminggu, sedangkan gerakan memutar biji melambangkan siklus peredaran benda langit dan kontinuitas hidup.</li>
                     <li><strong>Filosofi Ekonomi:</strong> Mengajarkan manajemen sumber daya; mengambil dari satu tempat untuk mendistribusikan ke tempat lain, menyisihkan untuk "lumbung" sebagai tabungan masa depan.</li>
                 </ul>
+				<div class="note">
+                    <strong>💡 Tantangan:</strong> Kalahkan PC dengan ronde permainan <b>paling banyak 3 ronde permainan</b>. Diakhir permainan lumbung PC berisi <b>nol</b> sedangkan lumbung dakon anda berisi <b>72</b>. Selanjutnya, nikmati apa sensasi hadiah yang anda peroleh dari hasil kemenangan anda.
+                </div>
                 <div class="note">
                     <strong>💡 Insight BiMath:</strong> Dakon adalah bukti bahwa nenek moyang kita telah mempraktikkan <em>Aritmetika Modulo</em> jauh sebelum istilah tersebut diformalkan dalam matematika modern.
                 </div>
             </div>
-            <!-- (Bagian manual lainnya dihilangkan agar kode tidak terlalu panjang, tapi tetap utuh di versi final) -->
-        </div>
+			<!-- (Bagian manual lainnya dihilangkan agar kode tidak terlalu panjang, tapi tetap utuh di versi final) -->
+        
+		<!-- 1. Representasi Matematis -->
+            <div class="math-section">
+                <h3>1. 🧮 Representasi Matematis Papan</h3>
+                <p>Papan Dakon direpresentasikan sebagai <strong>vektor 14-dimensi</strong>:</p>
+                <div class="formula">
+                    <code>board = [a₀, a₁, a₂, a₃, a₄, a₅, s₁, b₇, b₈, b₉, b₁₀, b₁₁, b₁₂, s₂]</code>
+                </div>
+                <ul>
+                    <li><span class="badge">0-5</span> Lubang kecil <strong>Pemain (Anda)</strong></li>
+                    <li><span class="badge">6</span> <strong>Lumbung Pemain</strong> (store Anda)</li>
+                    <li><span class="badge">7-12</span> Lubang kecil <strong>CPU</strong></li>
+                    <li><span class="badge">13</span> <strong>Lumbung CPU</strong></li>
+                </ul>
+                <div class="note">
+                    <strong>📊 State Awal:</strong><br>
+                    <code>board = [6,6,6,6,6,6,0,6,6,6,6,6,6,0]</code><br>
+                    Total biji: <strong>72</strong> (konstan sepanjang permainan)
+                </div>
+            </div>
+
+            <!-- 2. Fungsi Evaluasi & Minimax -->
+            <div class="math-section">
+                <h3>2. 🎯 Fungsi Evaluasi & Algoritma Minimax</h3>
+                <h4>Fungsi Evaluasi</h4>
+                <div class="formula">
+                    <code>E(board) = board[13] - board[6]</code>
+                </div>
+                <p>Fungsi linear sederhana yang menghitung <strong>selisih skor</strong>:</p>
+                <ul>
+                    <li><strong>E > 0</strong> : Posisi menguntungkan CPU</li>
+                    <li><strong>E < 0</strong> : Posisi menguntungkan Pemain</li>
+                    <li><strong>E = 0</strong> : Posisi seimbang</li>
+                </ul>
+                
+                <h4>Algoritma Minimax</h4>
+                <p>CPU menggunakan pencarian dengan kedalaman <strong>d = 3</strong>:</p>
+                <div class="formula">
+                    <code>
+                    Minimax(board, depth, isMax) = <br>
+                    &nbsp;&nbsp;if depth=0 or terminal: return E(board)<br>
+                    &nbsp;&nbsp;if isMax: max{ Minimax(simulate(move), depth-1, false) }<br>
+                    &nbsp;&nbsp;if isMin: min{ Minimax(simulate(move), depth-1, true) }
+                    </code>
+                </div>
+                <div class="note">
+                    <strong>⚡ Kompleksitas Waktu:</strong> O(b^d) = O(6³) = <strong>216 simulasi</strong> per langkah CPU<br>
+                    <strong>🎮 Strategi:</strong> CPU memaksimalkan skor, berasumsi Pemain meminimalkan skor CPU
+                </div>
+            </div>
+
+            <!-- 3. Aturan Permainan -->
+            <div class="math-section">
+                <h3>3. 🔄 Dinamika State Permainan</h3>
+                <h4>Penaburan Biji (Sowing)</h4>
+                <div class="formula">
+                    <code>next_index = (current_index + 1) mod 14</code>
+                </div>
+                <p>Proses iterasi siklik hingga biji habis, dengan aturan <strong>skip</strong>:</p>
+                <ul>
+                    <li>Pemain melewati lumbung CPU (indeks 13)</li>
+                    <li>CPU melewati lumbung Pemain (indeks 6)</li>
+                </ul>
+                
+                <h4>Aturan "Nembak" (Capture)</h4>
+                <div class="formula">
+                    <code>
+                    Jika biji_terakhir = 1 dan lubang_target kosong:<br>
+                    &nbsp;&nbsp;store_player += board[target] + board[12-target]<br>
+                    &nbsp;&nbsp;board[target] = 0<br>
+                    &nbsp;&nbsp;board[12-target] = 0
+                    </code>
+                </div>
+                <div class="note">
+                    <strong>🎯 Transformasi Matematis:</strong> Fungsi yang memetakan state lama ke state baru dengan penambahan nilai dari dua sel ke sel lumbung.
+                </div>
+            </div>
+
+            <!-- 4. Transisi Antar Ronde -->
+            <div class="math-section">
+                <h3>4. 🔄 Model Transisi Ronde</h3>
+                <p>Ketika semua lubang kecil kosong, dilakukan <strong>partisi sisa biji</strong>:</p>
+                <div class="formula">
+                    <code>
+                    Untuk i dari 5 hingga 0:<br>
+                    &nbsp;&nbsp;jika sisaP >= 6: board[i] = 6; sisaP -= 6<br>
+                    &nbsp;&nbsp;jika sisaP < 6: board[i] = 0 (lubang mati)
+                    </code>
+                </div>
+                <p>Proses yang sama untuk CPU (indeks 12-7).</p>
+                <div class="note">
+                    <strong>📐 Interpretasi Matematis:</strong> Pembagian bilangan bulat dengan batasan maksimum 6 per lubang.<br>
+                    <strong>🔥 Lubang Mati:</strong> Mengurangi dimensi ruang state untuk ronde berikutnya.
+                </div>
+            </div>
+
+            <!-- 5. Analisis Kompleksitas -->
+            <div class="math-section">
+                <h3>5. 📊 Analisis Kompleksitas Algoritma</h3>
+                <ul>
+                    <li><strong>Ruang State:</strong> 14-dimensi vektor bilangan bulat non-negatif</li>
+                    <li><strong>Kompleksitas Waktu Minimax:</strong> O(b^d) = O(216) per langkah</li>
+                    <li><strong>Kompleksitas Memori:</strong> O(d) untuk rekursi (d=3)</li>
+                    <li><strong>Heuristik Prioritas:</strong> Langkah "double-turn" (berakhir di lumbung) diprioritaskan</li>
+                </ul>
+                <div class="formula">
+                    <code>
+                    Langkah Optimal = argmax{ Minimax(simulate(move), 3, false) }<br>
+                    ∀ move ∈ {7,8,9,10,11,12} dengan board[move] > 0
+                    </code>
+                </div>
+            </div>
+
+            <!-- 6. Teori Permainan -->
+            <div class="math-section">
+                <h3>6. 🎮 Perspektif Teori Permainan</h3>
+                <p>Permainan Dakon adalah <strong>zero-sum game</strong> dengan informasi sempurna:</p>
+                <div class="formula">
+                    <code>
+                    Skor_Pemain + Skor_CPU = 72 (konstan)<br>
+                    Utility_CPU = -Utility_Pemain
+                    </code>
+                </div>
+                <ul>
+                    <li><strong>Nash Equilibrium:</strong> Strategi optimal yang ditemukan melalui Minimax</li>
+                    <li><strong>Deterministik:</strong> Tidak ada elemen probabilitas, semua state dapat diprediksi</li>
+                    <li><strong>Terminal State:</strong> Ketika semua lubang kecil kosong atau tidak ada gerakan yang mungkin</li>
+                </ul>
+                <div class="note">
+                    <strong>💡 Insight Matematis:</strong> Dengan kedalaman pencarian terbatas (d=3), AI menggunakan pendekatan <em>bounded rationality</em> yang efisien untuk permainan real-time.
+                </div>
+            </div>
+
+            <!-- 7. Tips Strategis -->
+            <div class="math-section">
+                <h3>7. 💡 Tips Mengalahkan CPU</h3>
+                <ul>
+                    <li><strong>🔍 Analisis Minimax:</strong> Perhatikan saran lubang yang akan berakhir di lumbung Anda</li>
+                    <li><strong>🎯 Fokus pada "Double Turn":</strong> Prioritaskan langkah yang memberi Anda giliran tambahan</li>
+                    <li><strong>⚡ Manfaatkan Aturan Nembak:</strong> Targetkan lubang lawan yang berisi banyak biji</li>
+                    <li><strong>📊 Prediksi Langkah CPU:</strong> CPU selalu memaksimalkan selisih skor, antisipasi dengan blokir</li>
+                    <li><strong>🔄 Rotasi Strategi:</strong> Jangan gunakan pola yang sama, CPU akan menyesuaikan</li>
+                </ul>
+            </div>
+
+            <!-- 8. Kesimpulan -->
+            <div class="math-section">
+                <h3>8. 📝 Kesimpulan Analisis</h3>
+                <p>Implementasi ini mendemonstrasikan penerapan:</p>
+                <ol>
+                    <li><strong>Aljabar Linear:</strong> State papan sebagai vektor 14D dengan operator transformasi</li>
+                    <li><strong>Teori Permainan:</strong> Algoritma Minimax dengan fungsi evaluasi linear</li>
+                    <li><strong>Optimasi Kombinatorial:</strong> Pencarian ruang state dengan heuristik prioritas</li>
+                    <li><strong>Sistem Dinamik Diskrit:</strong> Evolusi state berdasarkan aturan deterministik</li>
+                </ol>
+                <div class="formula">
+                    <code>
+                    ∀ langkah: S_{t+1} = f(S_t, a_t)<br>
+                    dimana a_t adalah langkah yang dipilih dan f adalah aturan permainan
+                    </code>
+                </div>
+                <p><strong>🎓 BiMath Note:</strong> Kombinasi antara matematika diskrit, kecerdasan buatan, dan desain antarmuka yang interaktif!</p>
+            </div>
+		
+		</div>
     </div>
 
     <div id="celebration">
