@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dakon Lab Prof. BiMath - Optimized Edition</title>
     <style>
+        /* Semua style SAMA PERSIS dengan kode asli (tidak diubah) */
         :root {
             --primary: #5d4037; --secondary: #8d6e63; --accent: #ffd54f;
             --bg: #f5efe6; --dead-pit: #212121; --win-step: #2e7d32;
@@ -250,7 +251,7 @@
                     <li><strong>Filosofi Ekonomi:</strong> Mengajarkan manajemen sumber daya; mengambil dari satu tempat untuk mendistribusikan ke tempat lain, menyisihkan untuk "lumbung" sebagai tabungan masa depan.</li>
                 </ul>
 				<div class="note">
-                    <strong>💡 Tantangan:</strong> Kalahkan PC dengan ronde permainan <b>paling banyak 3 ronde permainan</b>. Diakhir permainan lumbung PC berisi <b>nol</b> sedangkan lumbung dakon anda berisi <b>72</b>. Selanjutnya, nikmati apa sensasi hadiah yang anda peroleh dari hasil kemenangan anda.
+                    <strong>💡 Tantangan:</strong> Kalahkan PC dengan ronde permainan <b>paling banyak 3 ronde permainan</b>. Diakhir permainan lumbung PC berisi <b>kurang dari 6</b> biji (tidak cukup untuk ronde berikutnya) sedangkan lumbung anda berisi mayoritas biji. Selanjutnya, nikmati hadiah kembang api jika berhasil dalam ≤3 ronde.
                 </div>
                 <div class="note">
                     <strong>💡 Insight BiMath:</strong> Dakon adalah bukti bahwa nenek moyang kita telah mempraktikkan <em>Aritmetika Modulo</em> jauh sebelum istilah tersebut diformalkan dalam matematika modern.
@@ -494,10 +495,8 @@
     // ========== SUARA KEMBANG API YANG NATURAL (DENGAN VARIASI) ==========
     function playFireworkSound(variation = 0) {
         const now = audioCtx.currentTime;
-        // Variasi kecil agar tidak membosankan
-        const pitchOffset = variation * 50; // sedikit variasi frekuensi
+        const pitchOffset = variation * 50;
         
-        // 1. Suara proyektil naik (whistle) - opsional, kadang tidak digunakan agar tidak terlalu padat
         if (Math.random() > 0.3) {
             const whistle = audioCtx.createOscillator();
             const whistleGain = audioCtx.createGain();
@@ -512,7 +511,6 @@
             whistle.stop(now + 0.15);
         }
         
-        // 2. Ledakan utama (bass)
         const boom = audioCtx.createOscillator();
         const boomGain = audioCtx.createGain();
         boom.type = 'sine';
@@ -525,7 +523,6 @@
         boom.start(now);
         boom.stop(now + 0.6);
         
-        // 3. Suara kripsi (percikan) - 10-20 percikan acak
         const crackleCount = 12 + Math.floor(Math.random() * 15);
         for(let i = 0; i < crackleCount; i++) {
             const crackle = audioCtx.createOscillator();
@@ -542,7 +539,6 @@
             crackle.stop(now + delay + duration);
         }
         
-        // 4. Desisan (hiss) - efek partikel berjatuhan
         const hissBuffer = audioCtx.createBuffer(1, 4096, audioCtx.sampleRate);
         const hissData = hissBuffer.getChannelData(0);
         for(let i = 0; i < 4096; i++) {
@@ -700,6 +696,7 @@
         playLogic(bestMove !== -1 ? bestMove : valid[0]);
     }
 
+    // ========== MODIFIKASI checkRoundEnd UNTUK HADIAH KEMENANGAN MUTLAK ==========
     function checkRoundEnd() {
         const pE = [0,1,2,3,4,5].every(i => board[i]===0 || document.getElementById(`pit-${i}`).classList.contains('dead'));
         const cE = [7,8,9,10,11,12].every(i => board[i]===0 || document.getElementById(`pit-${i}`).classList.contains('dead'));
@@ -707,8 +704,19 @@
             for(let i=0; i<6; i++) { board[6]+=board[i]; board[i]=0; }
             for(let i=7; i<13; i++) { board[13]+=board[i]; board[i]=0; }
             updateUI();
+            
+            // Kondisi akhir permainan: tidak cukup biji untuk ronde berikutnya
             if (board[6] < 6 || board[13] < 6) {
-                triggerCelebration(board[6] > board[13] ? "ANDA MENANG MUTLAK!" : "CPU MENANG MUTLAK!");
+                let playerWin = board[6] > board[13];
+                // Kemenangan mutlak: pemain menang, lumbung CPU < 6, dan ronde ≤ 3
+                let absoluteWin = playerWin && board[13] < 6 && round <= 3;
+                
+                if (absoluteWin) {
+                    triggerCelebration("🏆 LOGIKA MATEAMATIKA ANDA HEBAT! 🏆", true);
+                } else {
+                    let msg = playerWin ? "ANDA MENANG, tapi tidak dalam 3 ronde." : "CPU MENANG! Tidak ada hadiah.";
+                    triggerCelebration(msg, false);
+                }
             } else {
                 document.getElementById('nextRoundBtn').style.display = 'block';
             }
@@ -738,26 +746,41 @@
     let particles = [];
     let fwActive = false;
     let animationId;
-    let lastSoundTime = 0; // untuk cooldown suara
+    let lastSoundTime = 0;
 
-    function triggerCelebration(msg) {
-        document.getElementById('celebration').style.display = 'flex';
-        document.getElementById('winTitle').innerText = msg;
-        fwCanvas.width = window.innerWidth; 
-        fwCanvas.height = window.innerHeight;
+    function triggerCelebration(msg, showFireworks = true) {
+        const celebrationDiv = document.getElementById('celebration');
+        const winTitle = document.getElementById('winTitle');
+        const winDesc = document.getElementById('winDesc');
         
-        fwActive = true;
-        lastSoundTime = performance.now() - 200; // biar langsung bisa main suara
-        loop();
-
-        // Hentikan setelah 10 detik
-        setTimeout(() => { 
-            fwActive = false; 
-            setTimeout(() => {
-                cancelAnimationFrame(animationId);
-                ctx.clearRect(0, 0, fwCanvas.width, fwCanvas.height);
-            }, 2000);
-        }, 10000);
+        winTitle.innerText = msg;
+        if (showFireworks) {
+            winDesc.innerText = "🎉 Selamat! Anda mengakhiri permainan tidak melebihi 3 ronde dengan lumbung CPU kurang dari 6! 🎉";
+        } else {
+            winDesc.innerText = "Permainan selesai. Untuk hadiah, kalahkan CPU dengan lumbung CPU kurang dari 6 dalam maksimal 3 ronde.";
+        }
+        
+        celebrationDiv.style.display = 'flex';
+        
+        if (showFireworks) {
+            fwCanvas.width = window.innerWidth; 
+            fwCanvas.height = window.innerHeight;
+            fwActive = true;
+            lastSoundTime = performance.now() - 200;
+            loop();
+            
+            setTimeout(() => { 
+                fwActive = false; 
+                setTimeout(() => {
+                    cancelAnimationFrame(animationId);
+                    ctx.clearRect(0, 0, fwCanvas.width, fwCanvas.height);
+                }, 2000);
+            }, 10000);
+        } else {
+            if (animationId) cancelAnimationFrame(animationId);
+            fwActive = false;
+            ctx.clearRect(0, 0, fwCanvas.width, fwCanvas.height);
+        }
     }
 
     function loop() {
@@ -765,7 +788,6 @@
         ctx.fillRect(0, 0, fwCanvas.width, fwCanvas.height);
         
         const now = performance.now();
-        // Buat ledakan baru secara acak (kurang lebih 6-8 kali per detik)
         if(fwActive && Math.random() < 0.12) {
             const x = Math.random() * fwCanvas.width;
             const y = Math.random() * fwCanvas.height / 2;
@@ -784,14 +806,12 @@
                 });
             }
             
-            // MAINKAN SUARA SETIAP ADA LEDAKAN BARU (dengan cooldown agar tidak terlalu padat)
-            if (now - lastSoundTime > 150) { // minimal jeda 150ms antar suara
-                playFireworkSound(Math.floor(Math.random() * 3)); // variasi
+            if (now - lastSoundTime > 150) {
+                playFireworkSound(Math.floor(Math.random() * 3));
                 lastSoundTime = now;
             }
         }
         
-        // Update dan gambar partikel
         particles.forEach((p, i) => {
             p.x += p.vx; 
             p.y += p.vy; 
