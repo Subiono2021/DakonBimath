@@ -4,6 +4,24 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dakon Lab Prof. BiMath - Optimized Edition</title>
+	
+	<!-- MathJax (SVG) -->
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['\\[', '\\]'], ['$$', '$$']],
+        processEscapes: true,
+        packages: { '[+]': ['ams'] },
+        tags: 'ams'
+      },
+      svg: { fontCache: 'global', scale: 1, minScale: 0.5 }
+    };
+  </script>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+ <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+	
     <style>
         /* Semua style SAMA PERSIS dengan kode asli (tidak diubah) */
         :root {
@@ -226,6 +244,7 @@
         }
         #fwCanvas { position: absolute; top: 0; left: 0; pointer-events: none; }
     </style>
+	
 </head>
 <body>
 
@@ -239,191 +258,132 @@
             <h2>📐 Analisis Matematika Dakon</h2>
             <p>Dakon Lab Prof. BiMath - Dokumentasi Lengkap</p>
         </div>
-        <div class="manual-content">
             <!-- Konten manual tetap sama (tidak diubah) -->
-            <div class="math-section">
-                <h3>📜 1. Jejak Historis & Filosofi Dakon</h3>
-                <p>Dakon (atau Congklak) adalah salah satu permainan papan tertua di dunia yang berakar dari tradisi <strong>Mancala</strong>.</p>
-                <ul align="justify">
-                    <li><strong>Asal Usul:</strong> Jejak arkeologis ditemukan di Yordania (7000 SM) dan menyebar ke Nusantara (abad 7-15) melalui jalur perdagangan kuno Arab/India. Nama lokal: <i>Dakon</i> (Jawa), <i>Congklak</i> (Sumatera/Melayu), <i>Mokaotan</i> (Sulawesi), <i>Loka' Molo</i> (Flores).</li>
-                    <li><b>Filosofi:</b> simbol sawah & benih → melatih berhitung, strategi, dan ketelitian psikomotorik.</li>
-                    <li><strong>Simbolisme Astronomi:</strong> Jumlah lubang (7 di setiap sisi) sering dikaitkan dengan jumlah hari dalam seminggu, sedangkan gerakan memutar biji melambangkan siklus peredaran benda langit dan kontinuitas hidup.</li>
-                    <li><strong>Filosofi Ekonomi:</strong> Mengajarkan manajemen sumber daya; mengambil dari satu tempat untuk mendistribusikan ke tempat lain, menyisihkan untuk "lumbung" sebagai tabungan masa depan.</li>
-                </ul>
-				<div class="note">
-                    <strong>💡 Tantangan:</strong> Kalahkan PC dengan ronde permainan <b>paling banyak 3 ronde permainan</b>. Diakhir permainan lumbung PC berisi <b>kurang dari 6</b> biji (tidak cukup untuk ronde berikutnya) sedangkan lumbung anda berisi mayoritas biji. Selanjutnya, nikmati hadiah kembang api jika berhasil dalam ≤3 ronde.
-                </div>
-                <div class="note">
-                    <strong>💡 Insight BiMath:</strong> Dakon adalah bukti bahwa nenek moyang kita telah mempraktikkan <em>Aritmetika Modulo</em> jauh sebelum istilah tersebut diformalkan dalam matematika modern.
-                </div>
-            </div>
-			<!-- (Bagian manual lainnya dihilangkan agar kode tidak terlalu panjang, tapi tetap utuh di versi final) -->
-        
-		<!-- 1. Representasi Matematis -->
-            <div class="math-section">
-                <h3>1. 🧮 Representasi Matematis Papan</h3>
-                <p>Papan Dakon direpresentasikan sebagai <strong>vektor 14-dimensi</strong>:</p>
-                <div class="formula">
-                    <code>board = [a₀, a₁, a₂, a₃, a₄, a₅, s₁, b₇, b₈, b₉, b₁₀, b₁₁, b₁₂, s₂]</code>
-                </div>
-                <ul>
-                    <li><span class="badge">0-5</span> Lubang kecil <strong>Pemain (Anda)</strong></li>
-                    <li><span class="badge">6</span> <strong>Lumbung Pemain</strong> (store Anda)</li>
-                    <li><span class="badge">7-12</span> Lubang kecil <strong>CPU</strong></li>
-                    <li><span class="badge">13</span> <strong>Lumbung CPU</strong></li>
-                </ul>
-                <div class="note">
-                    <strong>📊 State Awal:</strong><br>
-                    <code>board = [6,6,6,6,6,6,0,6,6,6,6,6,6,0]</code><br>
-                    Total biji: <strong>72</strong> (konstan sepanjang permainan)
-                </div>
-            </div>
+ <div class="manual-content">
+    <div class="math-section">
+        <h3>📜 1. Jejak Historis & Filosofi Dakon</h3>
+        <p align="justify">Dakon (atau Congklak) adalah salah satu permainan papan tertua di dunia yang berakar dari tradisi <strong>Mancala</strong>.</p>
+        <ul align="justify">
+            <li><strong>Asal Usul:</strong> Jejak arkeologis ditemukan di Yordania (7000 SM) dan menyebar ke Nusantara melalui jalur perdagangan kuno.</li>
+            <li><strong>Filosofi:</strong> Simbol sawah & benih → melatih manajemen sumber daya, strategi, dan ketelitian.</li>
+            <li><strong>Simbolisme Astronomi:</strong> Gerakan memutar biji melambangkan siklus peredaran benda langit dan kontinuitas hidup.</li>
+			<li><strong>Filosofi & Psikomotorik:</strong> Simbol sawah & benih → melatih <strong>koordinasi mata-tangan (hand-eye coordination)</strong>, presisi distribusi biji secara satu-per-satu (fine motor skills), serta ketelitian dalam menghitung cepat secara visual.</li>
 
-            <!-- 2. Fungsi Evaluasi & Minimax -->
-            <div class="math-section">
-                <h3>2. 🎯 Fungsi Evaluasi & Algoritma Minimax</h3>
-                <h4>Fungsi Evaluasi</h4>
-                <div class="formula">
-                    <code>E(board) = board[13] - board[6]</code>
-                </div>
-                <p>Fungsi linear sederhana yang menghitung <strong>selisih skor</strong>:</p>
-                <ul>
-                    <li><strong>E > 0</strong> : Posisi menguntungkan CPU</li>
-                    <li><strong>E < 0</strong> : Posisi menguntungkan Pemain</li>
-                    <li><strong>E = 0</strong> : Posisi seimbang</li>
-                </ul>
-                
-                <h4>Algoritma Minimax</h4>
-                <p>CPU menggunakan pencarian dengan kedalaman <strong>d = 3</strong>:</p>
-                <div class="formula">
-                    <code>
-                    Minimax(board, depth, isMax) = <br>
-                    &nbsp;&nbsp;if depth=0 or terminal: return E(board)<br>
-                    &nbsp;&nbsp;if isMax: max{ Minimax(simulate(move), depth-1, false) }<br>
-                    &nbsp;&nbsp;if isMin: min{ Minimax(simulate(move), depth-1, true) }
-                    </code>
-                </div>
-                <div class="note">
-                    <strong>⚡ Kompleksitas Waktu:</strong> O(b^d) = O(6³) = <strong>216 simulasi</strong> per langkah CPU<br>
-                    <strong>🎮 Strategi:</strong> CPU memaksimalkan skor, berasumsi Pemain meminimalkan skor CPU
-                </div>
-            </div>
-
-            <!-- 3. Aturan Permainan -->
-            <div class="math-section">
-                <h3>3. 🔄 Dinamika State Permainan</h3>
-                <h4>Penaburan Biji (Sowing)</h4>
-                <div class="formula">
-                    <code>next_index = (current_index + 1) mod 14</code>
-                </div>
-                <p>Proses iterasi siklik hingga biji habis, dengan aturan <strong>skip</strong>:</p>
-                <ul>
-                    <li>Pemain melewati lumbung CPU (indeks 13)</li>
-                    <li>CPU melewati lumbung Pemain (indeks 6)</li>
-                </ul>
-                
-                <h4>Aturan "Nembak" (Capture)</h4>
-                <div class="formula">
-                    <code>
-                    Jika biji_terakhir = 1 dan lubang_target kosong:<br>
-                    &nbsp;&nbsp;store_player += board[target] + board[12-target]<br>
-                    &nbsp;&nbsp;board[target] = 0<br>
-                    &nbsp;&nbsp;board[12-target] = 0
-                    </code>
-                </div>
-                <div class="note">
-                    <strong>🎯 Transformasi Matematis:</strong> Fungsi yang memetakan state lama ke state baru dengan penambahan nilai dari dua sel ke sel lumbung.
-                </div>
-            </div>
-
-            <!-- 4. Transisi Antar Ronde -->
-            <div class="math-section">
-                <h3>4. 🔄 Model Transisi Ronde</h3>
-                <p>Ketika semua lubang kecil kosong, dilakukan <strong>partisi sisa biji</strong>:</p>
-                <div class="formula">
-                    <code>
-                    Untuk i dari 5 hingga 0:<br>
-                    &nbsp;&nbsp;jika sisaP >= 6: board[i] = 6; sisaP -= 6<br>
-                    &nbsp;&nbsp;jika sisaP < 6: board[i] = 0 (lubang mati)
-                    </code>
-                </div>
-                <p>Proses yang sama untuk CPU (indeks 12-7).</p>
-                <div class="note">
-                    <strong>📐 Interpretasi Matematis:</strong> Pembagian bilangan bulat dengan batasan maksimum 6 per lubang.<br>
-                    <strong>🔥 Lubang Mati:</strong> Mengurangi dimensi ruang state untuk ronde berikutnya.
-                </div>
-            </div>
-
-            <!-- 5. Analisis Kompleksitas -->
-            <div class="math-section">
-                <h3>5. 📊 Analisis Kompleksitas Algoritma</h3>
-                <ul>
-                    <li><strong>Ruang State:</strong> 14-dimensi vektor bilangan bulat non-negatif</li>
-                    <li><strong>Kompleksitas Waktu Minimax:</strong> O(b^d) = O(216) per langkah</li>
-                    <li><strong>Kompleksitas Memori:</strong> O(d) untuk rekursi (d=3)</li>
-                    <li><strong>Heuristik Prioritas:</strong> Langkah "double-turn" (berakhir di lumbung) diprioritaskan</li>
-                </ul>
-                <div class="formula">
-                    <code>
-                    Langkah Optimal = argmax{ Minimax(simulate(move), 3, false) }<br>
-                    ∀ move ∈ {7,8,9,10,11,12} dengan board[move] > 0
-                    </code>
-                </div>
-            </div>
-
-            <!-- 6. Teori Permainan -->
-            <div class="math-section">
-                <h3>6. 🎮 Perspektif Teori Permainan</h3>
-                <p>Permainan Dakon adalah <strong>zero-sum game</strong> dengan informasi sempurna:</p>
-                <div class="formula">
-                    <code>
-                    Skor_Pemain + Skor_CPU = 72 (konstan)<br>
-                    Utility_CPU = -Utility_Pemain
-                    </code>
-                </div>
-                <ul>
-                    <li><strong>Nash Equilibrium:</strong> Strategi optimal yang ditemukan melalui Minimax</li>
-                    <li><strong>Deterministik:</strong> Tidak ada elemen probabilitas, semua state dapat diprediksi</li>
-                    <li><strong>Terminal State:</strong> Ketika semua lubang kecil kosong atau tidak ada gerakan yang mungkin</li>
-                </ul>
-                <div class="note">
-                    <strong>💡 Insight Matematis:</strong> Dengan kedalaman pencarian terbatas (d=3), AI menggunakan pendekatan <em>bounded rationality</em> yang efisien untuk permainan real-time.
-                </div>
-            </div>
-
-            <!-- 7. Tips Strategis -->
-            <div class="math-section">
-                <h3>7. 💡 Tips Mengalahkan CPU</h3>
-                <ul>
-                    <li><strong>🔍 Analisis Minimax:</strong> Perhatikan saran lubang yang akan berakhir di lumbung Anda</li>
-                    <li><strong>🎯 Fokus pada "Double Turn":</strong> Prioritaskan langkah yang memberi Anda giliran tambahan</li>
-                    <li><strong>⚡ Manfaatkan Aturan Nembak:</strong> Targetkan lubang lawan yang berisi banyak biji</li>
-                    <li><strong>📊 Prediksi Langkah CPU:</strong> CPU selalu memaksimalkan selisih skor, antisipasi dengan blokir</li>
-                    <li><strong>🔄 Rotasi Strategi:</strong> Jangan gunakan pola yang sama, CPU akan menyesuaikan</li>
-                </ul>
-            </div>
-
-            <!-- 8. Kesimpulan -->
-            <div class="math-section">
-                <h3>8. 📝 Kesimpulan Analisis</h3>
-                <p>Implementasi ini mendemonstrasikan penerapan:</p>
-                <ol>
-                    <li><strong>Aljabar Linear:</strong> State papan sebagai vektor 14D dengan operator transformasi</li>
-                    <li><strong>Teori Permainan:</strong> Algoritma Minimax dengan fungsi evaluasi linear</li>
-                    <li><strong>Optimasi Kombinatorial:</strong> Pencarian ruang state dengan heuristik prioritas</li>
-                    <li><strong>Sistem Dinamik Diskrit:</strong> Evolusi state berdasarkan aturan deterministik</li>
-                </ol>
-                <div class="formula">
-                    <code>
-                    ∀ langkah: S_{t+1} = f(S_t, a_t)<br>
-                    dimana a_t adalah langkah yang dipilih dan f adalah aturan permainan
-                    </code>
-                </div>
-                <p><strong>🎓 BiMath Note:</strong> Kombinasi antara matematika diskrit, kecerdasan buatan, dan desain antarmuka yang interaktif!</p>
-            </div>
+        </ul>
+        <div class="note">
+		<p align="justify">
+            <strong>💡 Tantangan:</strong> Kalahkan PC dalam <b>≤ 2 ronde</b>. Pastikan di akhir permainan lumbung PC berisi <b>nol biji</b> (kosong) sementara Anda menguasai mayoritas biji.
+		</p>
+        </div>
 		
-		</div>
+		<div class="note">
+		<p align="justify">
+		<b>💡 Insight BiMath:</b> Dakon adalah bukti bahwa nenek moyang kita telah mempraktikkan Aritmetika Modulo jauh sebelum istilah tersebut diformalkan dalam matematika modern.
+		</p>
+        </div>
+		
     </div>
+
+    <div class="math-section">
+        <h3>2. 🧮 Representasi Matematis Papan</h3>
+        <p>Papan Dakon dimodelkan sebagai <strong>vektor 14-dimensi</strong> dalam ruang state $\mathbb{Z}_{\geq 0}^{14}$:</p>
+        <div class="formula">
+            <code>board = [a₀, a₁, a₂, a₃, a₄, a₅, s₁, b₇, b₈, b₉, b₁₀, b₁₁, b₁₂, s₂]</code>
+        </div>
+        <ul>
+            <li><span class="badge">0-5</span> Lubang kecil <strong>Pemain (Anda)</strong></li>
+            <li><span class="badge">6</span> <strong>Lumbung (Store) Anda</strong></li>
+            <li><span class="badge">7-12</span> Lubang kecil <strong>CPU</strong></li>
+            <li><span class="badge">13</span> <strong>Lumbung (Store) CPU</strong></li>
+        </ul>
+        <div class="note">
+            <strong>📊 Invarian Permainan:</strong><br>
+            $\sum_{i=0}^{13} \text{board}[i] = 72$ (Total biji tetap konstan).
+        </div>
+    </div>
+
+    <div class="math-section">
+        <h3>3. 🕸️ Topologi Graf & Aritmetika Modulo</h3>
+        <p align="justify">
+		Aliran biji mengikuti struktur <strong>Graf Siklus Terarah (Directed Cycle Graph)</strong> $C_{14}$.
+		</p>
+        <div class="formula">
+            <code>Next_Index = (Current_Index + 1) mod 14</code>
+        </div>
+        <p align="justify">
+		Secara matematis, pergerakan ini adalah translasi dalam grup siklik $\mathbb{Z}_{14}$, namun dengan batasan (skip condition):
+		</p>
+        <ul>
+            <li>Pemain $P_1$ melewati indeks 13 ($x \neq 13$).</li>
+            <li>CPU $P_2$ melewati indeks 6 ($x \neq 6$).</li>
+        </ul>
+    </div>
+
+    <div class="math-section">
+        <h3>4. 🔄 Dinamika Transisi State</h3>
+        <h4>Mekanisme Penaburan (Sowing)</h4>
+        <p>Fungsi transisi $f(S, i)$ memetakan state $S$ ke $S'$ berdasarkan lubang asal $i$.</p>
+        
+        <h4>Aturan "Nembak" (Capture)</h4>
+        <p>Terjadi jika biji terakhir jatuh di lubang kosong sisi pemain ($0 \leq i \leq 5$) dan lubang lawan ($12-i$) tidak kosong:</p>
+        <div class="formula">
+            <code>
+            s₁ ← s₁ + 1 + board[12-i]<br>
+            board[i] ← 0, board[12-i] ← 0
+            </code>
+        </div>
+    </div>
+
+    <div class="math-section">
+        <h3>5. 🎯 Strategi AI: Bounded Minimax</h3>
+        <p>CPU mencari langkah optimal menggunakan pohon keputusan dengan kedalaman $d=3$.</p>
+        <div class="formula">
+            <code>E(board) = board[13] - board[6]</code>
+        </div>
+        <p align="justify">Fungsi evaluasi ini mengarahkan CPU untuk memaksimalkan <i>skor relatif</i>. Dengan 6 pilihan langkah per turn, AI mengevaluasi hingga $6^3 = 216$ kemungkinan state di masa depan.</p>
+    </div>
+
+    <div class="math-section">
+        <h3>6. 🔄 Model Partisi Ronde</h3>
+        <p align="justify">Transisi antar ronde menggunakan algoritma pembagian bilangan bulat (Integer Division):</p>
+        <div class="formula">
+            <code>
+            Jumlah_Lubang_Aktif = floor(Total_Biji / 6)
+            </code>
+        </div>
+        <div class="note">
+            <strong>🔥 Lubang Mati:</strong> Jika sisa biji < 6, lubang tersebut dinyatakan "terbakar", mengurangi dimensi ruang state pada iterasi berikutnya.
+        </div>
+    </div>
+
+    <div class="math-section">
+        <h3>7. 💡 Tips Strategis Bina Nalar</h3>
+        <ul>
+            <li><strong>Double Turn:</strong> Targetkan langkah yang berakhir tepat di lumbung ($s_1$). Secara matematis, ini adalah langkah $i$ dimana $board[i] = 6-i$.</li>
+            <li><strong>Defensif:</strong> Kosongkan lubang yang berisiko ditembak oleh lawan.</li>
+        </ul>
+    </div>
+
+    <div class="math-section">
+        <h3>8. 📝 Kesimpulan</h3>
+        <p align="justify">Dakon bukan sekadar permainan, melainkan implementasi nyata dari <strong>Sistem Dinamik Diskrit</strong> dan <strong>Optimasi Kombinatorial</strong>.
+		</p>
+		<p align="justify">
+		Permainan ini adalah simulasi <b>Zero-Sum Game</b> yang sempurna. Manfaat utamanya bagi pengguna adalah transformasi dari rote counting (berhitung hafalan) menuju strategic reasoning (penalaran strategis). Melalui interaksi dengan kode ini, kecerdasan psikomotoris tidak hanya dilatih secara fisik, tetapi juga secara kognitif melalui sinkronisasi logika dan tindakan.
+		</p>
+    </div>
+	<div class="note">
+        <p align="justify"><strong>
+		🎓 BiMath: Mengintegrasikan Tradisi ke dalam Logika Modern.</strong>
+        Kombinasi antara matematika diskrit, kecerdasan buatan, dan desain antarmuka yang interaktif!
+		</p>	
+		</div>
+</div>
+    
+	
+	
+	
+	</div>
 
     <div id="celebration">
         <canvas id="fwCanvas"></canvas>
@@ -709,12 +669,12 @@
             if (board[6] < 6 || board[13] < 6) {
                 let playerWin = board[6] > board[13];
                 // Kemenangan mutlak: pemain menang, lumbung CPU < 6, dan ronde ≤ 3
-                let absoluteWin = playerWin && board[13] < 6 && round <= 3;
+                let absoluteWin = playerWin && board[13] == 0 && round <= 2;
                 
                 if (absoluteWin) {
-                    triggerCelebration("🏆 LOGIKA MATEMATIKA ANDA HEBAT! 🏆", true);
+                    triggerCelebration("🏆 NALAR MATEMATIKA ANDA HEBAT! 🏆", true);
                 } else {
-                    let msg = playerWin ? "ANDA MENANG, tapi tidak dalam 3 ronde." : "CPU MENANG! Tidak ada hadiah.";
+                    let msg = playerWin ? "ANDA MENANG, tapi lumbung CPU ≠ 0." : "CPU MENANG! Tidak ada hadiah.";
                     triggerCelebration(msg, false);
                 }
             } else {
@@ -755,9 +715,9 @@
         
         winTitle.innerText = msg;
         if (showFireworks) {
-            winDesc.innerText = "🎉 Selamat! Anda mengakhiri permainan tidak melebihi 3 ronde dengan lumbung CPU kurang dari 6! 🎉";
+            winDesc.innerText = "🎉 Selamat! Anda mengakhiri permainan tidak melebihi 2 ronde dengan lumbung CPU nol.🎉";
         } else {
-            winDesc.innerText = "Permainan selesai. Untuk hadiah, kalahkan CPU dengan lumbung CPU kurang dari 6 dalam maksimal 3 ronde.";
+            winDesc.innerText = "Permainan selesai. Untuk hadiah, kalahkan CPU dengan lumbung CPU nol dalam maksimal 2 ronde.";
         }
         
         celebrationDiv.style.display = 'flex';
