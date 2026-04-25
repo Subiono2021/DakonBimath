@@ -3,445 +3,310 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dakon Lab Prof. BiMath - Optimized Edition</title>
-	
-	<!-- MathJax (SVG) -->
-  <script>
-    window.MathJax = {
-      tex: {
-        inlineMath: [['$', '$'], ['\\(', '\\)']],
-        displayMath: [['\\[', '\\]'], ['$$', '$$']],
-        processEscapes: true,
-        packages: { '[+]': ['ams'] },
-        tags: 'ams'
-      },
-      svg: { fontCache: 'global', scale: 1, minScale: 0.5 }
-    };
-  </script>
-  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
-  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
- <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-	
+    <title>Dakon Lab Prof. BiMath - Global Counter Firebase</title>
+    
+    <!-- MathJax -->
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['\\[', '\\]'], ['$$', '$$']],
+                processEscapes: true,
+                packages: { '[+]': ['ams'] },
+                tags: 'ams'
+            },
+            svg: { fontCache: 'global', scale: 1, minScale: 0.5 }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+    <script async src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    
     <style>
-        /* Semua style SAMA PERSIS dengan kode asli (tidak diubah) */
+        /* ========== GAYA LENGKAP (sama dengan kode asli Anda) ========== */
         :root {
             --primary: #5d4037; --secondary: #8d6e63; --accent: #ffd54f;
             --bg: #f5efe6; --dead-pit: #212121; --win-step: #2e7d32;
-            --manual-bg: #faf8f5;
-            --math-bg: #e8eaf6;
+            --manual-bg: #faf8f5; --math-bg: #e8eaf6;
         }
         body { font-family: 'Segoe UI', sans-serif; background: var(--bg); display: flex; flex-direction: column; align-items: center; padding: 20px; margin: 0; }
-        
-        .manual-toggle {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            z-index: 1000;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            color: white;
-            border: none;
-            border-radius: 50px;
-            padding: 12px 24px;
-            font-size: 16px;
-            font-weight: bold;
-            cursor: pointer;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        
-        .manual-toggle:hover {
-            transform: scale(1.05);
-            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
-        }
-        
-        .manual-panel {
-            position: fixed;
-            top: 0;
-            right: -500px;
-            width: 500px;
-            height: 100vh;
-            background: var(--manual-bg);
-            box-shadow: -5px 0 25px rgba(0,0,0,0.3);
-            z-index: 999;
-            transition: right 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-            overflow-y: auto;
-            overflow-x: hidden;
-            font-family: 'Segoe UI', sans-serif;
-        }
-        
-        .manual-panel.open {
-            right: 0;
-        }
-        
-        .manual-header {
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            color: white;
-            padding: 25px 20px;
-            position: sticky;
-            top: 0;
-            z-index: 10;
-        }
-        
-        .manual-header h2 {
-            margin: 0 0 8px 0;
-            font-size: 24px;
-        }
-        
-        .manual-header p {
-            margin: 0;
-            opacity: 0.9;
-            font-size: 14px;
-        }
-        
-        .close-manual {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            background: rgba(255,255,255,0.2);
-            border: none;
-            color: white;
-            font-size: 24px;
-            cursor: pointer;
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.3s;
-        }
-        
-        .close-manual:hover {
-            background: rgba(255,255,255,0.3);
-            transform: rotate(90deg);
-        }
-        
-        .manual-content {
-            padding: 20px;
-        }
-        
-        .math-section {
-            background: var(--math-bg);
-            border-left: 4px solid var(--primary);
-            padding: 15px;
-            margin: 20px 0;
-            border-radius: 8px;
-        }
-        
-        .math-section h3 {
-            color: var(--primary);
-            margin-bottom: 12px;
-            font-size: 18px;
-        }
-        
-        .math-section h4 {
-            color: var(--secondary);
-            margin: 12px 0 8px 0;
-            font-size: 16px;
-        }
-        
-        .formula {
-            background: #fff;
-            padding: 12px;
-            border-radius: 6px;
-            font-family: 'Courier New', monospace;
-            font-size: 14px;
-            margin: 10px 0;
-            overflow-x: auto;
-            border: 1px solid #ddd;
-        }
-        
-        .note {
-            background: #fff3e0;
-            border-left: 3px solid var(--accent);
-            padding: 10px;
-            margin: 10px 0;
-            font-size: 14px;
-        }
-        
-        .manual-content ul, .manual-content ol {
-            margin: 10px 0 10px 20px;
-        }
-        
-        .manual-content li {
-            margin: 5px 0;
-            line-height: 1.5;
-        }
-        
-        .manual-content p {
-            line-height: 1.6;
-            margin: 10px 0;
-        }
-        
-        .badge {
-            display: inline-block;
-            background: var(--primary);
-            color: white;
-            padding: 2px 8px;
-            border-radius: 12px;
-            font-size: 12px;
-            margin-right: 8px;
-        }
-        
-        @media (max-width: 768px) {
-            .manual-panel {
-                width: 100%;
-                right: -100%;
-            }
-            
-            .manual-toggle {
-                padding: 8px 16px;
-                font-size: 14px;
-            }
-        }
-        
+        .manual-toggle { position: fixed; top: 20px; right: 20px; z-index: 1000; background: linear-gradient(135deg, var(--primary), var(--secondary)); color: white; border: none; border-radius: 50px; padding: 12px 24px; font-size: 16px; font-weight: bold; cursor: pointer; box-shadow: 0 4px 12px rgba(0,0,0,0.2); transition: all 0.3s ease; display: flex; align-items: center; gap: 8px; }
+        .manual-toggle:hover { transform: scale(1.05); box-shadow: 0 6px 20px rgba(0,0,0,0.3); }
+        .manual-panel { position: fixed; top: 0; right: -500px; width: 500px; height: 100vh; background: var(--manual-bg); box-shadow: -5px 0 25px rgba(0,0,0,0.3); z-index: 999; transition: right 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55); overflow-y: auto; overflow-x: hidden; }
+        .manual-panel.open { right: 0; }
+        .manual-header { background: linear-gradient(135deg, var(--primary), var(--secondary)); color: white; padding: 25px 20px; position: sticky; top: 0; z-index: 10; }
+        .manual-header h2 { margin: 0 0 8px 0; font-size: 24px; }
+        .manual-header p { margin: 0; opacity: 0.9; font-size: 14px; }
+        .close-manual { position: absolute; top: 20px; right: 20px; background: rgba(255,255,255,0.2); border: none; color: white; font-size: 24px; cursor: pointer; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; transition: all 0.3s; }
+        .close-manual:hover { background: rgba(255,255,255,0.3); transform: rotate(90deg); }
+        .manual-content { padding: 20px; }
+        .math-section { background: var(--math-bg); border-left: 4px solid var(--primary); padding: 15px; margin: 20px 0; border-radius: 8px; }
+        .math-section h3 { color: var(--primary); margin-bottom: 12px; font-size: 18px; }
+        .math-section h4 { color: var(--secondary); margin: 12px 0 8px 0; font-size: 16px; }
+        .formula { background: #fff; padding: 12px; border-radius: 6px; font-family: 'Courier New', monospace; font-size: 14px; margin: 10px 0; overflow-x: auto; border: 1px solid #ddd; }
+        .note { background: #fff3e0; border-left: 3px solid var(--accent); padding: 10px; margin: 10px 0; font-size: 14px; }
+        .manual-content ul, .manual-content ol { margin: 10px 0 10px 20px; }
+        .manual-content li { margin: 5px 0; line-height: 1.5; }
+        .manual-content p { line-height: 1.6; margin: 10px 0; }
+        .badge { display: inline-block; background: var(--primary); color: white; padding: 2px 8px; border-radius: 12px; font-size: 12px; margin-right: 8px; }
+        @media (max-width: 768px) { .manual-panel { width: 100%; right: -100%; } .manual-toggle { padding: 8px 16px; font-size: 14px; } }
         .main-container { display: flex; gap: 20px; max-width: 1200px; width: 100%; flex-wrap: wrap; z-index: 10; position: relative; }
-        
-        .board-wrapper {
-            background: var(--secondary); padding: 40px 25px; border-radius: 100px;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.4); display: flex; align-items: center; gap: 20px;
-            border: 10px solid var(--primary);
-        }
-        .store {
-            width: 90px; height: 180px; background: #3e2723; border-radius: 50px;
-            display: flex; flex-direction: column; justify-content: center; align-items: center;
-            color: var(--accent); font-size: 32px; font-weight: bold; box-shadow: inset 0 10px 20px rgba(0,0,0,0.6);
-        }
-        .pit {
-            width: 60px; height: 60px; background: #a1887f; border-radius: 50%;
-            display: flex; justify-content: center; align-items: center; cursor: pointer;
-            font-weight: bold; font-size: 20px; color: white; transition: 0.3s;
-            box-shadow: inset 0 5px 10px rgba(0,0,0,0.5); position: relative;
-        }
+        .board-wrapper { background: var(--secondary); padding: 40px 25px; border-radius: 100px; box-shadow: 0 15px 35px rgba(0,0,0,0.4); display: flex; align-items: center; gap: 20px; border: 10px solid var(--primary); }
+        .store { width: 90px; height: 180px; background: #3e2723; border-radius: 50px; display: flex; flex-direction: column; justify-content: center; align-items: center; color: var(--accent); font-size: 32px; font-weight: bold; box-shadow: inset 0 10px 20px rgba(0,0,0,0.6); }
+        .pit { width: 60px; height: 60px; background: #a1887f; border-radius: 50%; display: flex; justify-content: center; align-items: center; cursor: pointer; font-weight: bold; font-size: 20px; color: white; transition: 0.3s; box-shadow: inset 0 5px 10px rgba(0,0,0,0.5); position: relative; }
         .pit:hover:not(.dead) { background: #d7ccc8; transform: scale(1.1); }
-        
         .pit.moving { background: var(--accent) !important; color: var(--primary); transform: scale(1.3); z-index: 20; }
         .pit.dead { background: var(--dead-pit) !important; opacity: 0.8; cursor: not-allowed !important; border: 2px dashed #666; }
         .pit.dead::after { content: "🔥"; position: absolute; font-size: 14px; top: -10px; }
-        
-        .win-path { 
-            border: 4px solid var(--win-step); 
-            animation: pulse 1.5s infinite;
-        }
-        @keyframes pulse {
-            0% { box-shadow: 0 0 0 0 rgba(46, 125, 50, 0.7); }
-            70% { box-shadow: 0 0 0 15px rgba(46, 125, 50, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(46, 125, 50, 0); }
-        }
-
+        .win-path { border: 4px solid var(--win-step); animation: pulse 1.5s infinite; }
+        @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(46, 125, 50, 0.7); } 70% { box-shadow: 0 0 0 15px rgba(46, 125, 50, 0); } 100% { box-shadow: 0 0 0 0 rgba(46, 125, 50, 0); } }
         .sidebar { flex: 1; min-width: 280px; display: flex; flex-direction: column; gap: 15px; }
         .panel { background: white; padding: 20px; border-radius: 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
         button { padding: 12px; border-radius: 30px; border: none; background: var(--primary); color: white; font-weight: bold; cursor: pointer; }
         .next-btn { background: #2e7d32; margin-top: 10px; display: none; width: 100%; }
-
-        #celebration {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.9); display: none; flex-direction: column;
-            justify-content: center; align-items: center; z-index: 9999; color: white;
-        }
+        #celebration { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); display: none; flex-direction: column; justify-content: center; align-items: center; z-index: 9999; color: white; text-align: center; backdrop-filter: blur(5px); }
         #fwCanvas { position: absolute; top: 0; left: 0; pointer-events: none; }
+        .glow-text { animation: glow 1.5s ease-in-out infinite alternate; }
+        @keyframes glow { from { text-shadow: 0 0 5px gold, 0 0 10px orange; } to { text-shadow: 0 0 20px gold, 0 0 30px #ffaa00; } }
+        .winner-counter { font-size: 2.8rem; font-weight: bold; background: linear-gradient(135deg, gold, #ffaa00); -webkit-background-clip: text; background-clip: text; color: transparent; display: inline-block; margin: 5px 0; cursor: pointer; transition: transform 0.2s; }
+        .winner-counter:hover { transform: scale(1.1); }
+        .counter-buttons { display: flex; gap: 10px; justify-content: center; margin-top: 8px; }
+        .counter-btn { background: #ff9800; padding: 6px 12px; font-size: 0.7rem; border-radius: 30px; transition: 0.2s; }
+        .share-btn { background: #2196f3; }
+        .share-btn:hover { background: #0b7dda; transform: translateY(-2px); }
+        .share-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); display: flex; justify-content: center; align-items: center; z-index: 10000; visibility: hidden; opacity: 0; transition: 0.3s; }
+        .share-modal.active { visibility: visible; opacity: 1; }
+        .share-content { background: white; padding: 25px; border-radius: 25px; max-width: 400px; text-align: center; color: #333; position: relative; }
+        .share-content textarea { width: 100%; margin: 15px 0; padding: 10px; border-radius: 15px; border: 1px solid #ccc; }
+        .close-modal { background: #ff5722; margin-top: 10px; }
+        @keyframes starBurst { 0% { transform: scale(0); opacity: 1; } 100% { transform: scale(2); opacity: 0; } }
+        .star-effect { position: fixed; pointer-events: none; font-size: 24px; animation: starBurst 0.5s ease-out forwards; z-index: 10001; }
     </style>
-	
 </head>
 <body>
 
-    <button class="manual-toggle" onclick="toggleManual()">
-        📖 Buku Manual Matematika
-    </button>
+<button class="manual-toggle" onclick="toggleManual()">📖 Buku Manual Matematika</button>
 
-    <div id="manualPanel" class="manual-panel">
-        <div class="manual-header">
-            <button class="close-manual" onclick="toggleManual()">✕</button>
-            <h2>📐 Analisis Matematika Dakon</h2>
-            <p>Dakon Lab Prof. BiMath - Dokumentasi Lengkap</p>
-        </div>
-            <!-- Konten manual tetap sama (tidak diubah) -->
- <div class="manual-content">
-    <div class="math-section">
-        <h3>📜 1. Jejak Historis & Filosofi Dakon</h3>
-        <p align="justify">Dakon (atau Congklak) adalah salah satu permainan papan tertua di dunia yang berakar dari tradisi <strong>Mancala</strong>.</p>
-        <ul align="justify">
-            <li><strong>Asal Usul:</strong> Jejak arkeologis ditemukan di Yordania (7000 SM) dan menyebar ke Nusantara melalui jalur perdagangan kuno.</li>
-            <li><strong>Filosofi:</strong> Simbol sawah & benih → melatih manajemen sumber daya, strategi, dan ketelitian.</li>
-            <li><strong>Simbolisme Astronomi:</strong> Gerakan memutar biji melambangkan siklus peredaran benda langit dan kontinuitas hidup.</li>
-			<li><strong>Filosofi & Psikomotorik:</strong> Simbol sawah & benih → melatih <strong>koordinasi mata-tangan (hand-eye coordination)</strong>, presisi distribusi biji secara satu-per-satu (fine motor skills), serta ketelitian dalam menghitung cepat secara visual.</li>
-
-        </ul>
-        <div class="note">
-		<p align="justify">
-            <strong>💡 Tantangan:</strong> Kalahkan PC dalam <b>≤ 2 ronde</b>. Pastikan di akhir permainan lumbung PC berisi <b>nol biji</b> (kosong) sementara Anda menguasai mayoritas biji.
-		</p>
-        </div>
-		
-		<div class="note">
-		<p align="justify">
-		<b>💡 Insight BiMath:</b> Dakon adalah bukti bahwa nenek moyang kita telah mempraktikkan Aritmetika Modulo jauh sebelum istilah tersebut diformalkan dalam matematika modern.
-		</p>
-        </div>
-		
+<div id="manualPanel" class="manual-panel">
+    <div class="manual-header">
+        <button class="close-manual" onclick="toggleManual()">✕</button>
+        <h2>📐 Analisis Matematika Dakon</h2>
+        <p>Dakon Lab Prof. BiMath - Global Counter Firebase</p>
     </div>
-
-    <div class="math-section">
-        <h3>2. 🧮 Representasi Matematis Papan</h3>
-        <p>Papan Dakon dimodelkan sebagai <strong>vektor 14-dimensi</strong> dalam ruang state $\mathbb{Z}_{\geq 0}^{14}$:</p>
-        <div class="formula">
-            <code>board = [a₀, a₁, a₂, a₃, a₄, a₅, s₁, b₇, b₈, b₉, b₁₀, b₁₁, b₁₂, s₂]</code>
+    <div class="manual-content">
+        <div class="math-section">
+            <h3>📜 1. Jejak Historis & Filosofi Dakon</h3>
+            <p align="justify">Dakon (atau Congklak) adalah salah satu permainan papan tertua di dunia yang berakar dari tradisi <strong>Mancala</strong>.</p>
+            <ul align="justify">
+                <li><strong>Asal Usul:</strong> Jejak arkeologis ditemukan di Yordania (7000 SM) dan menyebar ke Nusantara melalui jalur perdagangan kuno.</li>
+                <li><strong>Filosofi:</strong> Simbol sawah & benih → melatih manajemen sumber daya, strategi, dan ketelitian.</li>
+                <li><strong>Simbolisme Astronomi:</strong> Gerakan memutar biji melambangkan siklus peredaran benda langit dan kontinuitas hidup.</li>
+                <li><strong>Filosofi & Psikomotorik:</strong> Simbol sawah & benih → melatih <strong>koordinasi mata-tangan</strong>, presisi distribusi biji secara satu-per-satu, serta ketelitian dalam menghitung cepat secara visual.</li>
+            </ul>
+            <div class="note">
+                <p align="justify"><strong>💡 Tantangan:</strong> Kalahkan PC dalam <b>≤ 2 ronde</b>. Pastikan di akhir permainan lumbung PC berisi <b>nol biji</b> (kosong) sementara Anda menguasai mayoritas biji. <span style="background: gold; color: black; padding: 2px 6px; border-radius: 12px;">🏆 HADIAH SPESIAL jika berhasil!</span></p>
+            </div>
+            <div class="note"><p align="justify"><b>💡 Insight BiMath:</b> Dakon adalah bukti bahwa nenek moyang kita telah mempraktikkan Aritmetika Modulo jauh sebelum istilah tersebut diformalkan dalam matematika modern.</p></div>
         </div>
-        <ul>
-            <li><span class="badge">0-5</span> Lubang kecil <strong>Pemain (Anda)</strong></li>
-            <li><span class="badge">6</span> <strong>Lumbung (Store) Anda</strong></li>
-            <li><span class="badge">7-12</span> Lubang kecil <strong>CPU</strong></li>
-            <li><span class="badge">13</span> <strong>Lumbung (Store) CPU</strong></li>
-        </ul>
-        <div class="note">
-            <strong>📊 Invarian Permainan:</strong><br>
-            $\sum_{i=0}^{13} \text{board}[i] = 72$ (Total biji tetap konstan).
+        <div class="math-section">
+            <h3>2. 🧮 Representasi Matematis Papan</h3>
+            <p>Papan Dakon dimodelkan sebagai <strong>vektor 14-dimensi</strong> dalam ruang state $\mathbb{Z}_{\geq 0}^{14}$:</p>
+            <div class="formula"><code>board = [a₀, a₁, a₂, a₃, a₄, a₅, s₁, b₇, b₈, b₉, b₁₀, b₁₁, b₁₂, s₂]</code></div>
+            <ul><li><span class="badge">0-5</span> Lubang kecil <strong>Pemain (Anda)</strong></li><li><span class="badge">6</span> <strong>Lumbung (Store) Anda</strong></li><li><span class="badge">7-12</span> Lubang kecil <strong>CPU</strong></li><li><span class="badge">13</span> <strong>Lumbung (Store) CPU</strong></li></ul>
+            <div class="note"><strong>📊 Invarian Permainan:</strong><br>$\sum_{i=0}^{13} \text{board}[i] = 72$ (Total biji tetap konstan).</div>
         </div>
-    </div>
-
-    <div class="math-section">
-        <h3>3. 🕸️ Topologi Graf & Aritmetika Modulo</h3>
-        <p align="justify">
-		Aliran biji mengikuti struktur <strong>Graf Siklus Terarah (Directed Cycle Graph)</strong> $C_{14}$.
-		</p>
-        <div class="formula">
-            <code>Next_Index = (Current_Index + 1) mod 14</code>
+        <div class="math-section">
+            <h3>3. 🕸️ Topologi Graf & Aritmetika Modulo</h3>
+            <p align="justify">Aliran biji mengikuti struktur <strong>Graf Siklus Terarah (Directed Cycle Graph)</strong> $C_{14}$.</p>
+            <div class="formula"><code>Next_Index = (Current_Index + 1) mod 14</code></div>
+            <p align="justify">Secara matematis, pergerakan ini adalah translasi dalam grup siklik $\mathbb{Z}_{14}$, namun dengan batasan (skip condition):</p>
+            <ul><li>Pemain $P_1$ melewati indeks 13 ($x \neq 13$).</li><li>CPU $P_2$ melewati indeks 6 ($x \neq 6$).</li></ul>
         </div>
-        <p align="justify">
-		Secara matematis, pergerakan ini adalah translasi dalam grup siklik $\mathbb{Z}_{14}$, namun dengan batasan (skip condition):
-		</p>
-        <ul>
-            <li>Pemain $P_1$ melewati indeks 13 ($x \neq 13$).</li>
-            <li>CPU $P_2$ melewati indeks 6 ($x \neq 6$).</li>
-        </ul>
-    </div>
-
-    <div class="math-section">
-        <h3>4. 🔄 Dinamika Transisi State</h3>
-        <h4>Mekanisme Penaburan (Sowing)</h4>
-        <p>Fungsi transisi $f(S, i)$ memetakan state $S$ ke $S'$ berdasarkan lubang asal $i$.</p>
-        
-        <h4>Aturan "Nembak" (Capture)</h4>
-        <p>Terjadi jika biji terakhir jatuh di lubang kosong sisi pemain ($0 \leq i \leq 5$) dan lubang lawan ($12-i$) tidak kosong:</p>
-        <div class="formula">
-            <code>
-            s₁ ← s₁ + 1 + board[12-i]<br>
-            board[i] ← 0, board[12-i] ← 0
-            </code>
+        <div class="math-section">
+            <h3>4. 🔄 Dinamika Transisi State</h3>
+            <h4>Mekanisme Penaburan (Sowing)</h4>
+            <p>Fungsi transisi $f(S, i)$ memetakan state $S$ ke $S'$ berdasarkan lubang asal $i$.</p>
+            <h4>Aturan "Nembak" (Capture)</h4>
+            <p>Terjadi jika biji terakhir jatuh di lubang kosong sisi pemain ($0 \leq i \leq 5$) dan lubang lawan ($12-i$) tidak kosong:</p>
+            <div class="formula"><code>s₁ ← s₁ + 1 + board[12-i]<br>board[i] ← 0, board[12-i] ← 0</code></div>
         </div>
-    </div>
-
-    <div class="math-section">
-        <h3>5. 🎯 Strategi AI: Bounded Minimax</h3>
-        <p>CPU mencari langkah optimal menggunakan pohon keputusan dengan kedalaman $d=3$.</p>
-        <div class="formula">
-            <code>E(board) = board[13] - board[6]</code>
+        <div class="math-section">
+            <h3>5. 🎯 Strategi AI: Bounded Minimax</h3>
+            <p>CPU mencari langkah optimal menggunakan pohon keputusan dengan kedalaman $d=3$.</p>
+            <div class="formula"><code>E(board) = board[13] - board[6]</code></div>
+            <p align="justify">Fungsi evaluasi ini mengarahkan CPU untuk memaksimalkan <i>skor relatif</i>. Dengan 6 pilihan langkah per turn, AI mengevaluasi hingga $6^3 = 216$ kemungkinan state di masa depan.</p>
         </div>
-        <p align="justify">Fungsi evaluasi ini mengarahkan CPU untuk memaksimalkan <i>skor relatif</i>. Dengan 6 pilihan langkah per turn, AI mengevaluasi hingga $6^3 = 216$ kemungkinan state di masa depan.</p>
-    </div>
-
-    <div class="math-section">
-        <h3>6. 🔄 Model Partisi Ronde</h3>
-        <p align="justify">Transisi antar ronde menggunakan algoritma pembagian bilangan bulat (Integer Division):</p>
-        <div class="formula">
-            <code>
-            Jumlah_Lubang_Aktif = floor(Total_Biji / 6)
-            </code>
+        <div class="math-section">
+            <h3>6. 🔄 Model Partisi Ronde</h3>
+            <p align="justify">Transisi antar ronde menggunakan algoritma pembagian bilangan bulat (Integer Division):</p>
+            <div class="formula"><code>Jumlah_Lubang_Aktif = floor(Total_Biji / 6)</code></div>
+            <div class="note"><strong>🔥 Lubang Mati:</strong> Jika sisa biji < 6, lubang tersebut dinyatakan "terbakar", mengurangi dimensi ruang state pada iterasi berikutnya.</div>
         </div>
-        <div class="note">
-            <strong>🔥 Lubang Mati:</strong> Jika sisa biji < 6, lubang tersebut dinyatakan "terbakar", mengurangi dimensi ruang state pada iterasi berikutnya.
+        <div class="math-section" style="background: #e0f2f1; border-left-color: #00695c;">
+            <h3>🏆 7. STRATEGI RAHASIA: Kalahkan CPU dalam ≤2 Ronde</h3>
+            <p align="justify"><strong>Berdasarkan analisis mendalam terhadap kelemahan AI dan struktur matematis permainan, berikut adalah kunci kemenangan absolut (lumbung CPU = 0, ronde 1 atau 2):</strong></p>
+            <h4>💡 Eksploitasi Kelemahan Minimax CPU</h4>
+            <ul align="justify"><li>CPU hanya melihat <strong>3 langkah ke depan</strong>. Ia <strong>TIDAK</strong> bisa merencanakan efek transisi ronde yang terjadi setelah giliran ke-3.</li><li>Fungsi evaluasi $E = s_2 - s_1$ membuat CPU rakus mengejar selisih lumbung <strong>sesaat</strong>. Ia tidak sadar bahwa mengisi lumbung Anda sedikit bisa berakibat fatal di ronde berikutnya.</li><li><strong>Strategi:</strong> Bangun posisi yang "buruk" menurut CPU (selisih lumbung kecil) tetapi dalam 2 langkah lagi akan mengosongkan semua biji lawan melalui capture berantai.</li></ul>
+            <h4>🎯 Target Utama: $s_2 = 0$ di Akhir Ronde 1 atau 2</h4>
+            <p align="justify">Permainan memberikan hadiah spesial jika <code>board[13] == 0 && round <= 2</code>. Artinya Anda harus membuat lumbung CPU benar-benar kosong sebelum ronde ke-3 bergulir. Caranya:</p>
+            <ol align="justify"><li><strong>Paksa Dead Pits di Sisi CPU:</strong> Di akhir ronde, sisa biji di lumbung CPU ($s_2$) dibagi 6. Jika $s_2 < 6$, maka di ronde berikutnya <strong>tidak ada lubang CPU yang aktif</strong> (semua jadi 🔥). Ini adalah kondisi "mati total" bagi CPU.</li><li><strong>Gunakan Capture (Nembak) secara Agresif:</strong> Setiap kali Anda berhasil menembak, Anda memindahkan biji lawan langsung ke lumbung Anda. Rencanakan agar <strong>semua biji CPU habis tertembak</strong> sebelum ronde berakhir.</li><li><strong>Manfaatkan aturan "main lagi" (extra turn):</strong> Jika biji terakhir jatuh di lumbung Anda, Anda mendapat giliran tambahan. Ini bisa Anda gunakan untuk terus menyerang tanpa memberi lawan kesempatan.</li></ol>
+            <h4>📐 Rumus Praktis di Lapangan</h4>
+            <div class="formula"><code>// Cek apakah langkah dari lubang i akan berakhir di lumbung Anda (extra turn)<br>willLandInStore(i) = ( (board[i] + i) mod 14 ) == 6 <br>// Cek potensi capture: setelah menabur, apakah lubang tujuan kosong dan lubang lawan (12-i) berisi > 0 ?</code></div>
+            <p align="justify">Kombinasikan kedua kondisi di atas. Idealnya: pilih lubang yang <strong>(a) memberi extra turn</strong> dan <strong>(b) segera diikuti capture</strong> pada giliran kedua (karena Anda main lagi).</p>
+            <h4>⚡ Contoh Skenario Kemenangan 2 Ronde</h4>
+            <ul align="justify"><li><strong>Ronde 1:</strong> Anda bermain sangat ofensif, melakukan capture berulang. Di akhir ronde, semua biji CPU (awalnya 36 biji) habis berpindah ke lumbung Anda. $s_2^{(1)} = 0$, $s_1^{(1)} = 72$.</li><li><strong>Transisi ke Ronde 2:</strong> Karena $s_2=0$, CPU tidak memiliki biji untuk mengisi lubang kecilnya. Keenam lubang CPU menjadi <strong>dead</strong>.</li><li><strong>Ronde 2:</strong> Giliran Anda mulai. Anda tinggal menabur dari lubang Anda sendiri. Lumbung CPU tetap 0. Setelah giliran Anda selesai, permainan berakhir dengan kemenangan mutlak Anda.</li></ul>
+            <div class="note" style="background: #fff9c4;"><strong>🧠 Pesan Semangat (Spirit):</strong> Anda tidak perlu menjadi jenius matematika untuk menerapkan ini. Pahamilah bahwa CPU buta terhadap jangka panjang. <strong>Serang terus, kosongkan lumbung lawan, dan nikmati pesta kembang api kemenangan!</strong> 🎆</div>
         </div>
+        <div class="math-section">
+            <h3>8. 📝 Kesimpulan Akademis</h3>
+            <p align="justify">Dakon bukan sekadar permainan, melainkan implementasi nyata dari <strong>Sistem Dinamik Diskrit</strong> dan <strong>Optimasi Kombinatorial</strong>. Permainan ini adalah simulasi <b>Zero-Sum Game</b> yang sempurna. Manfaat utamanya bagi pengguna adalah transformasi dari rote counting menuju strategic reasoning. Melalui interaksi dengan kode ini, kecerdasan psikomotoris tidak hanya dilatih secara fisik, tetapi juga secara kognitif melalui sinkronisasi logika dan tindakan.</p>
+        </div>
+        <div class="note"><p align="justify"><strong>🎓 BiMath: Mengintegrasikan Tradisi ke dalam Logika Modern.</strong> Kombinasi antara matematika diskrit, kecerdasan buatan, dan desain antarmuka yang interaktif!</p></div>
     </div>
-
-    <div class="math-section">
-        <h3>7. 💡 Tips Strategis Bina Nalar</h3>
-        <ul>
-            <li><strong>Double Turn:</strong> Targetkan langkah yang berakhir tepat di lumbung ($s_1$). Secara matematis, ini adalah langkah $i$ dimana $board[i] = 6-i$.</li>
-            <li><strong>Defensif:</strong> Kosongkan lubang yang berisiko ditembak oleh lawan.</li>
-        </ul>
-    </div>
-
-    <div class="math-section">
-        <h3>8. 📝 Kesimpulan</h3>
-        <p align="justify">Dakon bukan sekadar permainan, melainkan implementasi nyata dari <strong>Sistem Dinamik Diskrit</strong> dan <strong>Optimasi Kombinatorial</strong>.
-		</p>
-		<p align="justify">
-		Permainan ini adalah simulasi <b>Zero-Sum Game</b> yang sempurna. Manfaat utamanya bagi pengguna adalah transformasi dari rote counting (berhitung hafalan) menuju strategic reasoning (penalaran strategis). Melalui interaksi dengan kode ini, kecerdasan psikomotoris tidak hanya dilatih secara fisik, tetapi juga secara kognitif melalui sinkronisasi logika dan tindakan.
-		</p>
-    </div>
-	<div class="note">
-        <p align="justify"><strong>
-		🎓 BiMath: Mengintegrasikan Tradisi ke dalam Logika Modern.</strong>
-        Kombinasi antara matematika diskrit, kecerdasan buatan, dan desain antarmuka yang interaktif!
-		</p>	
-		</div>
 </div>
-    
-	
-	
-	
-	</div>
 
-    <div id="celebration">
-        <canvas id="fwCanvas"></canvas>
-        <h1 id="winTitle" style="font-size: 3.5rem; margin: 0; color: #ffd54f;">KEMENANGAN!</h1>
-        <p id="winDesc" style="font-size: 1.5rem; margin: 20px 0;">Logika Matematika Anda Sungguh Luar Biasa!</p>
-        <button onclick="location.reload()" style="background: #ffd54f; color: #000; width: 220px; font-size: 1.1rem;">Ulangi Permainan</button>
-    </div>
+<div id="celebration">
+    <canvas id="fwCanvas"></canvas>
+    <h1 id="winTitle" style="font-size: 3.5rem; margin: 0; color: #ffd54f; font-weight: bold;" class="glow-text">🏆 KEMENANGAN MUTLAK! 🏆</h1>
+    <p id="winDesc" style="font-size: 1.3rem; margin: 20px 0; max-width: 80%;"></p>
+    <button onclick="location.reload()" style="background: #ffd54f; color: #000; width: 220px; font-size: 1.1rem; border-radius: 40px; font-weight: bold;">Main Lagi</button>
+</div>
 
-    <h2 style="color: var(--primary); margin: 15px;">Dakon BiMath-Lab: Optimasi Minimax</h2>
+<h2 style="color: var(--primary); margin: 15px;">Dakon BiMath-Lab: Optimasi Minimax - Global Counter 🔥</h2>
 
-    <div class="main-container">
-        <div style="flex: 2; display: flex; flex-direction: column; align-items: center;">
-            <div id="status" style="font-size: 1.2rem; font-weight: bold; margin-bottom: 15px; background: #fff; padding: 8px 25px; border-radius: 30px; border: 2px solid var(--primary);">Giliran: Anda</div>
-            <div class="board-wrapper">
-                <div id="pit-13" class="store">0<div style="font-size:12px">CPU</div></div>
-                <div style="display: flex; flex-direction: column; gap: 20px;">
-                    <div style="display: flex; gap: 15px;">
-                        <div id="pit-12" class="pit">6</div><div id="pit-11" class="pit">6</div><div id="pit-10" class="pit">6</div>
-                        <div id="pit-9" class="pit">6</div><div id="pit-8" class="pit">6</div><div id="pit-7" class="pit">6</div>
-                    </div>
-                    <div style="display: flex; gap: 15px;">
-                        <div id="pit-0" class="pit" onclick="makeMove(0)">6</div><div id="pit-1" class="pit" onclick="makeMove(1)">6</div>
-                        <div id="pit-2" class="pit" onclick="makeMove(2)">6</div><div id="pit-3" class="pit" onclick="makeMove(3)">6</div>
-                        <div id="pit-4" class="pit" onclick="makeMove(4)">6</div><div id="pit-5" class="pit" onclick="makeMove(5)">6</div>
-                    </div>
+<div class="main-container">
+    <div style="flex: 2; display: flex; flex-direction: column; align-items: center;">
+        <div id="status" style="font-size: 1.2rem; font-weight: bold; margin-bottom: 15px; background: #fff; padding: 8px 25px; border-radius: 30px; border: 2px solid var(--primary);">Giliran: Anda</div>
+        <div class="board-wrapper">
+            <div id="pit-13" class="store">0<div style="font-size:12px">CPU</div></div>
+            <div style="display: flex; flex-direction: column; gap: 20px;">
+                <div style="display: flex; gap: 15px;">
+                    <div id="pit-12" class="pit">6</div><div id="pit-11" class="pit">6</div><div id="pit-10" class="pit">6</div>
+                    <div id="pit-9" class="pit">6</div><div id="pit-8" class="pit">6</div><div id="pit-7" class="pit">6</div>
                 </div>
-                <div id="pit-6" class="store">0<div style="font-size:12px">ANDA</div></div>
+                <div style="display: flex; gap: 15px;">
+                    <div id="pit-0" class="pit" onclick="makeMove(0)">6</div><div id="pit-1" class="pit" onclick="makeMove(1)">6</div>
+                    <div id="pit-2" class="pit" onclick="makeMove(2)">6</div><div id="pit-3" class="pit" onclick="makeMove(3)">6</div>
+                    <div id="pit-4" class="pit" onclick="makeMove(4)">6</div><div id="pit-5" class="pit" onclick="makeMove(5)">6</div>
+                </div>
             </div>
-            <button id="nextRoundBtn" class="next-btn" onclick="startNextRound()">Lanjut Ronde Berikutnya ⏩</button>
+            <div id="pit-6" class="store">0<div style="font-size:12px">ANDA</div></div>
         </div>
+        <button id="nextRoundBtn" class="next-btn" onclick="startNextRound()">Lanjut Ronde Berikutnya ⏩</button>
+    </div>
 
-        <div class="sidebar">
-            <div class="panel">
-                <strong>⚡ Kecepatan Simulasi</strong>
-                <input type="range" id="speed" min="100" max="1000" value="300" style="width: 100%; margin-top:10px;">
+    <div class="sidebar">
+        <div class="panel"><strong>⚡ Kecepatan Simulasi</strong><input type="range" id="speed" min="100" max="1000" value="300" style="width: 100%; margin-top:10px;"></div>
+        <div class="panel"><strong style="color: #2e7d32;">🔍 Analisis Minimax</strong><div id="analysisContent" style="font-size: 0.9rem; margin-top: 8px; color: #333;">CPU sedang memprediksi langkah...</div></div>
+        <div class="panel" style="font-size: 0.85rem;"><strong>Ronde Aktif: <span id="roundNum">1</span></strong></div>
+        <!-- Panel counter global Firebase (tanpa tombol reset) -->
+        <div class="panel" style="background: linear-gradient(135deg, #fff9c4, #ffe082); text-align: center;">
+            <strong>🏆 GRANDMASTER DAKON 🏆</strong><br>
+            <span style="font-size: 0.8rem;">Jumlah kemenangan global (semua pemain)<br>dengan lumbung CPU 0 dalam ≤2 ronde:</span><br>
+            <span id="absoluteWinCounter" class="winner-counter" title="Klik untuk info global">0</span><br>
+            <div class="counter-buttons">
+                <button class="counter-btn share-btn" onclick="shareVictory()">🎉 Bagikan Kemenangan</button>
             </div>
-            <div class="panel">
-                <strong style="color: #2e7d32;">🔍 Analisis Minimax</strong>
-                <div id="analysisContent" style="font-size: 0.9rem; margin-top: 8px; color: #333;">CPU sedang memprediksi langkah...</div>
-            </div>
-            <div class="panel" style="font-size: 0.85rem;">
-                <strong>Ronde Aktif: <span id="roundNum">1</span></strong><br><br>
-                <em>Info:</em> CPU menggunakan pencarian rekursif kedalaman 3 untuk mengevaluasi lumbung.
-            </div>
+            <div style="font-size: 11px; margin-top: 8px;">✨ Data real-time dari Firebase ✨</div>
         </div>
     </div>
+</div>
+
+<!-- Modal Share -->
+<div id="shareModal" class="share-modal">
+    <div class="share-content">
+        <h3>🎉 Bagikan Prestasi Anda!</h3>
+        <p>Salin teks di bawah ini dan bagikan ke media sosial atau teman:</p>
+        <textarea id="shareText" rows="4" readonly></textarea>
+        <button id="copyShareBtn" style="background: #4caf50; margin-bottom: 10px;">📋 Salin ke Clipboard</button>
+        <button class="close-modal" onclick="closeShareModal()">Tutup</button>
+    </div>
+</div>
+
+<!-- FIREBASE MODULE (Global Counter) -->
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-app.js";
+    import { getFirestore, doc, updateDoc, increment, onSnapshot } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-firestore.js";
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyAzBzAc9bU7t9MH28lHUC68bPfYTvMV26Q",
+        authDomain: "dakoninteraktif.firebaseapp.com",
+        projectId: "dakoninteraktif",
+        storageBucket: "dakoninteraktif.firebasestorage.app",
+        messagingSenderId: "639275004938",
+        appId: "1:639275004938:web:f6c7bb734db8a9ecf01bf3",
+        measurementId: "G-KD0KT9EPFT"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+    const globalCounterRef = doc(db, "gameStats", "global");
+
+    window.incrementGlobalWin = async function() {
+        try {
+            await updateDoc(globalCounterRef, { totalWins: increment(1) });
+            console.log("Global win added");
+            const el = document.getElementById('absoluteWinCounter');
+            if(el) el.style.transform = 'scale(1.2)';
+            setTimeout(() => { if(el) el.style.transform = ''; }, 200);
+            if(window.playPlingSound) window.playPlingSound();
+            if(window.createStarEffect) window.createStarEffect();
+        } catch(e) { console.error("Gagal update global counter:", e); }
+    };
+
+    window.displayGlobalCounter = function() {
+        const counterElement = document.getElementById('absoluteWinCounter');
+        if(!counterElement) return;
+        onSnapshot(globalCounterRef, (docSnap) => {
+            if(docSnap.exists()) {
+                const total = docSnap.data().totalWins || 0;
+                counterElement.innerText = total;
+            } else {
+                console.warn("Dokumen global belum ada, membuat...");
+                updateDoc(globalCounterRef, { totalWins: 0 }).catch(console.error);
+            }
+        }, (error) => console.error("Gagal mendengarkan:", error));
+    };
+
+    document.addEventListener('DOMContentLoaded', () => {
+        window.displayGlobalCounter();
+    });
+</script>
 
 <script>
-    // ========== FUNGSI MANUAL ==========
-    function toggleManual() {
-        const panel = document.getElementById('manualPanel');
-        panel.classList.toggle('open');
-    }
+    // ========== SEMUA FUNGSI PERMAINAN (SAMA DENGAN ASLI, TAPI TANPA localSTORAGE COUNTER) ==========
+    function toggleManual() { document.getElementById('manualPanel').classList.toggle('open'); }
 
-    // ========== KODE PERMAINAN ==========
-    let board = [6, 6, 6, 6, 6, 6, 0, 6, 6, 6, 6, 6, 6, 0];
-    let turn = 1; let isMoving = false; let round = 1;
+    let board = [6,6,6,6,6,6,0,6,6,6,6,6,6,0];
+    let turn = 1, isMoving = false, round = 1;
     const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+    // Suara pling dan efek bintang (dipanggil dari module Firebase)
+    window.playPlingSound = function() {
+        try {
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.frequency.value = 880;
+            gain.gain.setValueAtTime(0.2, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.3);
+            osc.connect(gain); gain.connect(audioCtx.destination);
+            osc.start(); osc.stop(audioCtx.currentTime + 0.3);
+        } catch(e) { console.log("Audio tidak tersedia"); }
+    };
+
+    window.createStarEffect = function() {
+        const counterEl = document.getElementById('absoluteWinCounter');
+        if(!counterEl) return;
+        const rect = counterEl.getBoundingClientRect();
+        for (let i = 0; i < 12; i++) {
+            const star = document.createElement('div');
+            star.innerHTML = ['⭐', '✨', '🌟', '💫'][Math.floor(Math.random() * 4)];
+            star.className = 'star-effect';
+            star.style.left = (rect.left + rect.width/2 + (Math.random() - 0.5) * 60) + 'px';
+            star.style.top = (rect.top + rect.height/2 + (Math.random() - 0.5) * 50) + 'px';
+            document.body.appendChild(star);
+            setTimeout(() => star.remove(), 500);
+        }
+    };
 
     function playWoodSound() {
         const osc = audioCtx.createOscillator();
@@ -452,11 +317,9 @@
         osc.start(); osc.stop(audioCtx.currentTime + 0.1);
     }
 
-    // ========== SUARA KEMBANG API YANG NATURAL (DENGAN VARIASI) ==========
     function playFireworkSound(variation = 0) {
         const now = audioCtx.currentTime;
         const pitchOffset = variation * 50;
-        
         if (Math.random() > 0.3) {
             const whistle = audioCtx.createOscillator();
             const whistleGain = audioCtx.createGain();
@@ -470,7 +333,6 @@
             whistle.start(now);
             whistle.stop(now + 0.15);
         }
-        
         const boom = audioCtx.createOscillator();
         const boomGain = audioCtx.createGain();
         boom.type = 'sine';
@@ -482,7 +344,6 @@
         boomGain.connect(audioCtx.destination);
         boom.start(now);
         boom.stop(now + 0.6);
-        
         const crackleCount = 12 + Math.floor(Math.random() * 15);
         for(let i = 0; i < crackleCount; i++) {
             const crackle = audioCtx.createOscillator();
@@ -498,12 +359,9 @@
             crackle.start(now + delay);
             crackle.stop(now + delay + duration);
         }
-        
         const hissBuffer = audioCtx.createBuffer(1, 4096, audioCtx.sampleRate);
         const hissData = hissBuffer.getChannelData(0);
-        for(let i = 0; i < 4096; i++) {
-            hissData[i] = (Math.random() * 2 - 1) * 0.3;
-        }
+        for(let i = 0; i < 4096; i++) hissData[i] = (Math.random() * 2 - 1) * 0.3;
         const hiss = audioCtx.createBufferSource();
         const hissGain = audioCtx.createGain();
         hiss.buffer = hissBuffer;
@@ -515,7 +373,6 @@
         hiss.start(now + 0.2);
     }
 
-    // ========== FUNGSI UTAMA PERMAINAN (TIDAK BERUBAH) ==========
     function updateUI() {
         board.forEach((seeds, i) => {
             const el = document.getElementById(`pit-${i}`);
@@ -529,7 +386,6 @@
 
     function willLandInStore(startIdx, pTurn) {
         let s = board[startIdx], c = startIdx, opp = pTurn === 1 ? 13 : 6;
-        let tempBoard = [...board];
         while(s > 0) {
             c = (c + 1) % 14;
             if(c === opp || document.getElementById(`pit-${c}`).classList.contains('dead')) continue;
@@ -559,24 +415,13 @@
         const pE = [0,1,2,3,4,5].every(i => b[i]===0);
         const cE = [7,8,9,10,11,12].every(i => b[i]===0);
         if(depth === 0 || pE || cE) return evaluateBoard(b);
-
         if(isMax) {
             let maxEval = -Infinity;
-            for(let i=7; i<=12; i++) {
-                if(b[i] > 0) {
-                    let ev = minimax(simulateMove([...b], i, 2), depth-1, false);
-                    maxEval = Math.max(maxEval, ev);
-                }
-            }
+            for(let i=7; i<=12; i++) if(b[i] > 0) maxEval = Math.max(maxEval, minimax(simulateMove([...b], i, 2), depth-1, false));
             return maxEval;
         } else {
             let minEval = Infinity;
-            for(let i=0; i<=5; i++) {
-                if(b[i] > 0) {
-                    let ev = minimax(simulateMove([...b], i, 1), depth-1, true);
-                    minEval = Math.min(minEval, ev);
-                }
-            }
+            for(let i=0; i<=5; i++) if(b[i] > 0) minEval = Math.min(minEval, minimax(simulateMove([...b], i, 1), depth-1, true));
             return minEval;
         }
     }
@@ -585,12 +430,8 @@
         const analysisDiv = document.getElementById('analysisContent');
         if(turn !== 1) { analysisDiv.innerText = "CPU sedang menghitung probabilitas..."; return; }
         let wins = [];
-        for(let i=0; i<6; i++) {
-            if(board[i] > 0 && !document.getElementById(`pit-${i}`).classList.contains('dead') && willLandInStore(i, 1)) wins.push(i+1);
-        }
-        analysisDiv.innerHTML = wins.length > 0 
-            ? "💡 Peluang: Lubang " + wins.join(", ") + " akan berakhir di lumbung."
-            : "Saran: Fokus pada lubang dengan biji terbanyak.";
+        for(let i=0; i<6; i++) if(board[i] > 0 && !document.getElementById(`pit-${i}`).classList.contains('dead') && willLandInStore(i, 1)) wins.push(i+1);
+        analysisDiv.innerHTML = wins.length > 0 ? "💡 Peluang: Lubang " + wins.join(", ") + " akan berakhir di lumbung." : "Saran: Fokus pada lubang dengan biji terbanyak.";
     }
 
     async function makeMove(idx) {
@@ -603,13 +444,11 @@
         let seeds = board[idx]; board[idx] = 0;
         let curr = idx;
         let delay = parseInt(document.getElementById('speed').value);
-
         while (seeds > 0) {
             curr = (curr + 1) % 14;
             const isOppStore = (turn === 1 && curr === 13) || (turn === 2 && curr === 6);
             const isDead = document.getElementById(`pit-${curr}`).classList.contains('dead');
             if (isOppStore || isDead) continue;
-            
             document.getElementById(`pit-${curr}`).classList.add('moving');
             playWoodSound();
             board[curr]++; seeds--;
@@ -617,7 +456,6 @@
             await new Promise(r => setTimeout(r, delay));
             document.getElementById(`pit-${curr}`).classList.remove('moving');
         }
-
         if (curr !== 6 && curr !== 13 && board[curr] > 1) {
             return playLogic(curr);
         } else if (board[curr] === 1 && ((turn === 1 && curr < 6) || (turn === 2 && curr > 6 && curr < 13))) {
@@ -628,7 +466,6 @@
                 updateUI();
             }
         }
-
         if (checkRoundEnd()) return;
         if ((turn === 1 && curr !== 6) || (turn === 2 && curr !== 13)) turn = turn === 1 ? 2 : 1;
         isMoving = false; updateUI();
@@ -636,27 +473,17 @@
     }
 
     function cpuThinkAndPlay() {
-        let bestScore = -Infinity;
-        let bestMove = -1;
         let valid = [7,8,9,10,11,12].filter(i => board[i]>0 && !document.getElementById(`pit-${i}`).classList.contains('dead'));
-        
         let doubleTurn = valid.find(i => willLandInStore(i, 2));
-        if(doubleTurn !== undefined) {
-            playLogic(doubleTurn);
-            return;
-        }
-
+        if(doubleTurn !== undefined) { playLogic(doubleTurn); return; }
+        let bestScore = -Infinity, bestMove = -1;
         for(let move of valid) {
             let score = minimax(simulateMove([...board], move, 2), 3, false);
-            if(score > bestScore) {
-                bestScore = score;
-                bestMove = move;
-            }
+            if(score > bestScore) { bestScore = score; bestMove = move; }
         }
         playLogic(bestMove !== -1 ? bestMove : valid[0]);
     }
 
-    // ========== MODIFIKASI checkRoundEnd UNTUK HADIAH KEMENANGAN MUTLAK ==========
     function checkRoundEnd() {
         const pE = [0,1,2,3,4,5].every(i => board[i]===0 || document.getElementById(`pit-${i}`).classList.contains('dead'));
         const cE = [7,8,9,10,11,12].every(i => board[i]===0 || document.getElementById(`pit-${i}`).classList.contains('dead'));
@@ -664,18 +491,15 @@
             for(let i=0; i<6; i++) { board[6]+=board[i]; board[i]=0; }
             for(let i=7; i<13; i++) { board[13]+=board[i]; board[i]=0; }
             updateUI();
-            
-            // Kondisi akhir permainan: tidak cukup biji untuk ronde berikutnya
             if (board[6] < 6 || board[13] < 6) {
                 let playerWin = board[6] > board[13];
-                // Kemenangan mutlak: pemain menang, lumbung CPU < 6, dan ronde ≤ 3
                 let absoluteWin = playerWin && board[13] == 0 && round <= 2;
-                
                 if (absoluteWin) {
-                    triggerCelebration("🏆 NALAR MATEMATIKA ANDA HEBAT! 🏆", true);
+                    if(window.incrementGlobalWin) window.incrementGlobalWin();
+                    triggerCelebration(true);
                 } else {
                     let msg = playerWin ? "ANDA MENANG, tapi lumbung CPU ≠ 0." : "CPU MENANG! Tidak ada hadiah.";
-                    triggerCelebration(msg, false);
+                    triggerCelebration(false, msg);
                 }
             } else {
                 document.getElementById('nextRoundBtn').style.display = 'block';
@@ -700,7 +524,7 @@
         updateUI();
     }
 
-    // ========== ANIMASI KEMBANG API DENGAN SUARA SINKRON ==========
+    // ========== ANIMASI KEMENANGAN ==========
     const fwCanvas = document.getElementById('fwCanvas');
     const ctx = fwCanvas.getContext('2d');
     let particles = [];
@@ -708,45 +532,30 @@
     let animationId;
     let lastSoundTime = 0;
 
-    function triggerCelebration(msg, showFireworks = true) {
+    function triggerCelebration(isAbsoluteWin, customMsg = "") {
         const celebrationDiv = document.getElementById('celebration');
         const winTitle = document.getElementById('winTitle');
         const winDesc = document.getElementById('winDesc');
-        
-        winTitle.innerText = msg;
-        if (showFireworks) {
-            winDesc.innerText = "🎉 Selamat! Anda mengakhiri permainan tidak melebihi 2 ronde dengan lumbung CPU nol.🎉";
-        } else {
-            winDesc.innerText = "Permainan selesai. Untuk hadiah, kalahkan CPU dengan lumbung CPU nol dalam maksimal 2 ronde.";
-        }
-        
-        celebrationDiv.style.display = 'flex';
-        
-        if (showFireworks) {
-            fwCanvas.width = window.innerWidth; 
-            fwCanvas.height = window.innerHeight;
+        if (isAbsoluteWin) {
+            winTitle.innerHTML = "🏆 GRANDMASTER DAKON! 🏆<br>🧠 NALAR MATEMATIKA LEVEL DEWA! 🧠";
+            winDesc.innerHTML = `<strong>🎉 SELAMAT! 🎉</strong><br><br>Anda tidak hanya mengalahkan AI dalam ≤2 ronde, tetapi juga mengosongkan lumbung CPU (0 biji)!<br><br>🌟 <strong>Anda telah membuktikan bahwa:</strong> 🌟<br>➤ Strategi manusia mengalahkan komputasi brute-force.<br>➤ Pemahaman matematika diskrit (modulo, graf siklik, invarian) Anda luar biasa.<br>➤ Anda mampu mengeksploitasi kelemahan Minimax depth-3 dengan sempurna.<br><br>✨ <strong>Gelar kehormatan:</strong> “Master Eksploitasi Minimax”, “Raja Dakon”, “Pemecah Logika AI”. ✨<br><br>💎 <em>“Tidak semua orang bisa melihat matriks di balik biji-bijian. Anda adalah salah satu dari sedikit.”</em> 💎`;
+            fwCanvas.width = window.innerWidth; fwCanvas.height = window.innerHeight;
             fwActive = true;
             lastSoundTime = performance.now() - 200;
             loop();
-            
-            setTimeout(() => { 
-                fwActive = false; 
-                setTimeout(() => {
-                    cancelAnimationFrame(animationId);
-                    ctx.clearRect(0, 0, fwCanvas.width, fwCanvas.height);
-                }, 2000);
-            }, 10000);
+            setTimeout(() => { fwActive = false; setTimeout(() => { cancelAnimationFrame(animationId); ctx.clearRect(0, 0, fwCanvas.width, fwCanvas.height); }, 2000); }, 10000);
         } else {
+            winTitle.innerHTML = "🏁 PERMAINAN SELESAI 🏁";
+            winDesc.innerHTML = customMsg || "Untuk mendapatkan hadiah spesial, kalahkan CPU dengan lumbung CPU = 0 dalam maksimal 2 ronde. Coba lagi!";
             if (animationId) cancelAnimationFrame(animationId);
             fwActive = false;
             ctx.clearRect(0, 0, fwCanvas.width, fwCanvas.height);
         }
+        celebrationDiv.style.display = 'flex';
     }
 
     function loop() {
-        ctx.fillStyle = 'rgba(0,0,0,0.15)'; 
-        ctx.fillRect(0, 0, fwCanvas.width, fwCanvas.height);
-        
+        ctx.fillStyle = 'rgba(0,0,0,0.15)'; ctx.fillRect(0, 0, fwCanvas.width, fwCanvas.height);
         const now = performance.now();
         if(fwActive && Math.random() < 0.12) {
             const x = Math.random() * fwCanvas.width;
@@ -756,41 +565,49 @@
             for(let i = 0; i < particleCount; i++) {
                 const angle = Math.random() * Math.PI * 2;
                 const speed = 2 + Math.random() * 6;
-                particles.push({
-                    x, y, 
-                    vx: Math.cos(angle) * speed, 
-                    vy: Math.sin(angle) * speed, 
-                    a: 1,
-                    size: 2 + Math.random() * 3,
-                    color
-                });
+                particles.push({ x, y, vx: Math.cos(angle) * speed, vy: Math.sin(angle) * speed, a: 1, size: 2 + Math.random() * 3, color });
             }
-            
-            if (now - lastSoundTime > 150) {
-                playFireworkSound(Math.floor(Math.random() * 3));
-                lastSoundTime = now;
-            }
+            if (now - lastSoundTime > 150) { playFireworkSound(Math.floor(Math.random() * 3)); lastSoundTime = now; }
         }
-        
         particles.forEach((p, i) => {
-            p.x += p.vx; 
-            p.y += p.vy; 
-            p.vy += 0.08;
-            p.a -= 0.012;
-            
-            ctx.fillStyle = p.color;
-            ctx.globalAlpha = p.a;
+            p.x += p.vx; p.y += p.vy; p.vy += 0.08; p.a -= 0.012;
+            ctx.fillStyle = p.color; ctx.globalAlpha = p.a;
             ctx.fillRect(p.x, p.y, p.size, p.size);
-            
             if(p.a <= 0 || p.y > fwCanvas.height) particles.splice(i, 1);
         });
-        
         ctx.globalAlpha = 1;
         animationId = requestAnimationFrame(loop);
     }
 
-    updateUI();
-    // ========== AKHIR KODE ==========
+    // Fungsi info dan share (mengambil nilai dari counter global)
+    function showGlobalCounterInfo() {
+        const globalSpan = document.getElementById('absoluteWinCounter');
+        let total = globalSpan ? globalSpan.innerText : "?";
+        alert(`🌍 TOTAL KEMENANGAN GLOBAL: ${total}\n\nSetiap kali seseorang di dunia menang dengan lumbung CPU = 0 dalam ≤2 ronde, angka ini bertambah. Terima kasih telah berkontribusi!`);
+    }
+
+    function shareVictory() {
+        const globalSpan = document.getElementById('absoluteWinCounter');
+        let total = globalSpan ? globalSpan.innerText : "?";
+        const text = `🎉 Saya baru saja menjadi GRANDMASTER DAKON! 🎉\n\nSaya berhasil mengalahkan AI dalam ≤2 ronde dengan lumbung CPU = 0.\n🌍 Total kemenangan global saat ini: ${total} kali.\n\n“Tidak semua orang bisa melihat matriks di balik biji-bijian. Saya adalah salah satu dari sedikit.”\n\nMainkan juga di: https://subiono2021.github.io/DakonBimath/`;
+        const shareTextarea = document.getElementById('shareText');
+        shareTextarea.value = text;
+        document.getElementById('shareModal').classList.add('active');
+        document.getElementById('copyShareBtn').onclick = () => {
+            shareTextarea.select();
+            document.execCommand('copy');
+            alert("Teks berhasil disalin! Sekarang bagikan ke media sosial Anda.");
+        };
+    }
+
+    function closeShareModal() { document.getElementById('shareModal').classList.remove('active'); }
+
+    // Pasang event listener pada counter global untuk info
+    document.addEventListener('DOMContentLoaded', () => {
+        const counterSpan = document.getElementById('absoluteWinCounter');
+        if (counterSpan) counterSpan.addEventListener('click', showGlobalCounterInfo);
+        updateUI();
+    });
 </script>
 </body>
 </html>
