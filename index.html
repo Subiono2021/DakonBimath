@@ -143,7 +143,11 @@
         </div>
         <div class="math-section" style="background: #e0f2f1; border-left-color: #00695c;">
             <h3>🏆 7. STRATEGI RAHASIA: Kalahkan CPU dalam ≤2 Ronde</h3>
-            <p align="justify"><strong>Berdasarkan analisis mendalam terhadap kelemahan AI dan struktur matematis permainan, berikut adalah kunci kemenangan absolut (lumbung CPU = 0, ronde 1 atau 2):</strong></p>
+            <p align="justify">
+			<strong>
+			Berdasarkan analisis mendalam terhadap kelemahan AI dan struktur matematis permainan, berikut adalah kunci kemenangan absolut (lumbung CPU = 0, ronde 1 atau 2):
+			</strong>
+			</p>
             <h4>💡 Eksploitasi Kelemahan Minimax CPU</h4>
             <ul align="justify"><li>CPU hanya melihat <strong>3 langkah ke depan</strong>. Ia <strong>TIDAK</strong> bisa merencanakan efek transisi ronde yang terjadi setelah giliran ke-3.</li><li>Fungsi evaluasi $E = s_2 - s_1$ membuat CPU rakus mengejar selisih lumbung <strong>sesaat</strong>. Ia tidak sadar bahwa mengisi lumbung Anda sedikit bisa berakibat fatal di ronde berikutnya.</li><li><strong>Strategi:</strong> Bangun posisi yang "buruk" menurut CPU (selisih lumbung kecil) tetapi dalam 2 langkah lagi akan mengosongkan semua biji lawan melalui capture berantai.</li></ul>
             <h4>🎯 Target Utama: $s_2 = 0$ di Akhir Ronde 1 atau 2</h4>
@@ -153,7 +157,12 @@
             <div class="formula"><code>// Cek apakah langkah dari lubang i akan berakhir di lumbung Anda (extra turn)<br>willLandInStore(i) = ( (board[i] + i) mod 14 ) == 6 <br>// Cek potensi capture: setelah menabur, apakah lubang tujuan kosong dan lubang lawan (12-i) berisi > 0 ?</code></div>
             <p align="justify">Kombinasikan kedua kondisi di atas. Idealnya: pilih lubang yang <strong>(a) memberi extra turn</strong> dan <strong>(b) segera diikuti capture</strong> pada giliran kedua (karena Anda main lagi).</p>
             <h4>⚡ Contoh Skenario Kemenangan 2 Ronde</h4>
-            <ul align="justify"><li><strong>Ronde 1:</strong> Anda bermain sangat ofensif, melakukan capture berulang. Di akhir ronde, semua biji CPU (awalnya 36 biji) habis berpindah ke lumbung Anda. $s_2^{(1)} = 0$, $s_1^{(1)} = 72$.</li><li><strong>Transisi ke Ronde 2:</strong> Karena $s_2=0$, CPU tidak memiliki biji untuk mengisi lubang kecilnya. Keenam lubang CPU menjadi <strong>dead</strong>.</li><li><strong>Ronde 2:</strong> Giliran Anda mulai. Anda tinggal menabur dari lubang Anda sendiri. Lumbung CPU tetap 0. Setelah giliran Anda selesai, permainan berakhir dengan kemenangan mutlak Anda.</li></ul>
+            <ul align="justify">
+			<li><strong>Ronde 1:</strong> Anda bermain sangat ofensif, melakukan capture berulang. Di akhir ronde, semua biji CPU (awalnya 36 biji) habis berpindah ke lumbung Anda. $s_2^{(1)} = 0$, $s_1^{(1)} = 72$.</li>
+			<li><strong>Transisi ke Ronde 2:</strong> Karena $s_2=0$, CPU tidak memiliki biji untuk mengisi lubang kecilnya. Keenam lubang CPU menjadi <strong>dead</strong>.</li>
+			<li><strong>Ronde 2:</strong> Giliran Anda mulai. Anda tinggal menabur dari lubang Anda sendiri. Lumbung CPU tetap 0. Setelah giliran Anda selesai, permainan berakhir dengan kemenangan mutlak Anda.</li>
+			<li><b>Ronde Aktif:</b> Secara interaktif menampilkan nilai angka ronde permainan yang sedang berlangsung.</li>
+			</ul>
             <div class="note" style="background: #fff9c4;"><strong>🧠 Pesan Semangat (Spirit):</strong> Anda tidak perlu menjadi jenius matematika untuk menerapkan ini. Pahamilah bahwa CPU buta terhadap jangka panjang. <strong>Serang terus, kosongkan lumbung lawan, dan nikmati pesta kembang api kemenangan!</strong> 🎆</div>
         </div>
         <div class="math-section">
@@ -498,7 +507,7 @@
                     if(window.incrementGlobalWin) window.incrementGlobalWin();
                     triggerCelebration(true);
                 } else {
-                    let msg = playerWin ? "ANDA MENANG, tapi lumbung CPU ≠ 0." : "CPU MENANG! Tidak ada hadiah.";
+                    let msg = playerWin ? "ANDA MENANG, tapi Ronde > 2 atau lumbung CPU ≠ 0." : "CPU MENANG! Tidak ada hadiah.";
                     triggerCelebration(false, msg);
                 }
             } else {
