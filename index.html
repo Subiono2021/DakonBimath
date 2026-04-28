@@ -103,7 +103,7 @@
                 <li><strong>Filosofi & Psikomotorik:</strong> Simbol sawah & benih → melatih <strong>koordinasi mata-tangan</strong>, presisi distribusi biji secara satu-per-satu, serta ketelitian dalam menghitung cepat secara visual.</li>
             </ul>
             <div class="note">
-                <p align="justify"><strong>💡 Tantangan:</strong> Kalahkan PC dalam <b>≤ 2 ronde</b>. Pastikan di akhir permainan lumbung PC berisi <b>nol biji</b> (kosong) sementara Anda menguasai mayoritas biji. <span style="background: gold; color: black; padding: 2px 6px; border-radius: 12px;">🏆 HADIAH SPESIAL jika berhasil!</span></p>
+                <p align="justify"><strong>💡 Tantangan:</strong> Kalahkan PC dalam <b>≤ 2 ronde</b>. Pastikan di akhir permainan biji lumbung PC berisi <b>< 6</b> sementara Anda menguasai mayoritas biji. <span style="background: gold; color: black; padding: 2px 6px; border-radius: 12px;">🏆 HADIAH SPESIAL jika berhasil!</span></p>
             </div>
             <div class="note"><p align="justify"><b>💡 Insight BiMath:</b> Dakon adalah bukti bahwa nenek moyang kita telah mempraktikkan Aritmetika Modulo jauh sebelum istilah tersebut diformalkan dalam matematika modern.</p></div>
         </div>
@@ -502,12 +502,12 @@
             updateUI();
             if (board[6] < 6 || board[13] < 6) {
                 let playerWin = board[6] > board[13];
-                let absoluteWin = playerWin && board[13] == 0 && round <= 2;
+                let absoluteWin = playerWin && board[13] < 6 && round <= 2;
                 if (absoluteWin) {
                     if(window.incrementGlobalWin) window.incrementGlobalWin();
                     triggerCelebration(true);
                 } else {
-                    let msg = playerWin ? "ANDA MENANG, tapi Ronde > 2 atau lumbung CPU ≠ 0." : "CPU MENANG! Tidak ada hadiah.";
+                    let msg = playerWin ? "ANDA MENANG, tapi Ronde > 2.": "CPU MENANG! Tidak ada hadiah.";
                     triggerCelebration(false, msg);
                 }
             } else {
@@ -547,7 +547,7 @@
         const winDesc = document.getElementById('winDesc');
         if (isAbsoluteWin) {
             winTitle.innerHTML = "🏆 GRANDMASTER DAKON! 🏆<br>🧠 NALAR MATEMATIKA LEVEL DEWA! 🧠";
-            winDesc.innerHTML = `<strong>🎉 SELAMAT! 🎉</strong><br><br>Anda tidak hanya mengalahkan AI dalam ≤2 ronde, tetapi juga mengosongkan lumbung CPU (0 biji)!<br><br>🌟 <strong>Anda telah membuktikan bahwa:</strong> 🌟<br>➤ Strategi manusia mengalahkan komputasi brute-force.<br>➤ Pemahaman matematika diskrit (modulo, graf siklik, invarian) Anda luar biasa.<br>➤ Anda mampu mengeksploitasi kelemahan Minimax depth-3 dengan sempurna.<br><br>✨ <strong>Gelar kehormatan:</strong> “Master Eksploitasi Minimax”, “Raja Dakon”, “Pemecah Logika AI”. ✨<br><br>💎 <em>“Tidak semua orang bisa melihat matriks di balik biji-bijian. Anda adalah salah satu dari sedikit.”</em> 💎`;
+            winDesc.innerHTML = `<strong>🎉 SELAMAT! 🎉</strong><br><br>Anda tidak hanya mengalahkan AI dalam ≤2 ronde, tetapi juga biji lumbung CPU < 6!<br><br>🌟 <strong>Anda telah membuktikan bahwa:</strong> 🌟<br>➤ Strategi manusia mengalahkan komputasi brute-force.<br>➤ Pemahaman matematika diskrit (modulo, graf siklik, invarian) Anda luar biasa.<br>➤ Anda mampu mengeksploitasi kelemahan Minimax depth-3 dengan sempurna.<br><br>✨ <strong>Gelar kehormatan:</strong> “Master Eksploitasi Minimax”, “Raja Dakon”, “Pemecah Logika AI”. ✨<br><br>💎 <em>“Tidak semua orang bisa melihat matriks di balik biji-bijian. Anda adalah salah satu dari sedikit.”</em> 💎`;
             fwCanvas.width = window.innerWidth; fwCanvas.height = window.innerHeight;
             fwActive = true;
             lastSoundTime = performance.now() - 200;
@@ -592,13 +592,13 @@
     function showGlobalCounterInfo() {
         const globalSpan = document.getElementById('absoluteWinCounter');
         let total = globalSpan ? globalSpan.innerText : "?";
-        alert(`🌍 TOTAL KEMENANGAN GLOBAL: ${total}\n\nSetiap kali seseorang di dunia menang dengan lumbung CPU = 0 dalam ≤2 ronde, angka ini bertambah. Terima kasih telah berkontribusi!`);
+        alert(`🌍 TOTAL KEMENANGAN GLOBAL: ${total}\n\nSetiap kali seseorang di dunia menang dengan lumbung CPU < 6 dalam ≤2 ronde, angka ini bertambah. Terima kasih telah berkontribusi!`);
     }
 
     function shareVictory() {
         const globalSpan = document.getElementById('absoluteWinCounter');
         let total = globalSpan ? globalSpan.innerText : "?";
-        const text = `🎉 Saya baru saja menjadi GRANDMASTER DAKON! 🎉\n\nSaya berhasil mengalahkan AI dalam ≤2 ronde dengan lumbung CPU = 0.\n🌍 Total kemenangan global saat ini: ${total} kali.\n\n“Tidak semua orang bisa melihat matriks di balik biji-bijian. Saya adalah salah satu dari sedikit.”\n\nMainkan juga di: https://subiono2021.github.io/DakonBimath/`;
+        const text = `     🎉 PENGHARGAAN GRANDMASTER DAKON! 🎉\n\nSaya berhasil mengalahkan AI dalam ≤ 2 ronde dengan lumbung CPU < 6.\n\n🌍 Total kemenangan global saat ini: ${total} GRANDMASTER DAKON.\n\n“Tidak semua orang bisa melihat matriks di balik biji-bijian. Saya adalah salah satu dari sedikit.”\n\nMainkan juga di: https://subiono2021.github.io/DakonBimath/`;
         const shareTextarea = document.getElementById('shareText');
         shareTextarea.value = text;
         document.getElementById('shareModal').classList.add('active');
